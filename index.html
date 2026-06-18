@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Samastha Centenary Invitation Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #f5f0e1 0%, #e8dec9 100%);
+            --primary-gold: #c5a03b;
+            --dark-brown: #2c2519;
+            --samastha-green: #198754;
+            --card-bg: #ffffff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background: var(--bg-gradient); color: var(--dark-brown); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+
+        .container { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 3px solid var(--primary-gold); text-align: center; }
+        
+        .header-zone { margin-bottom: 25px; position: relative; }
+        .centenary-logo { width: 100px; height: auto; margin-bottom: 10px; }
+        h1 { font-size: 1.6rem; font-weight: 900; color: #a12328; margin-bottom: 5px; }
+        p.subtitle { font-size: 1rem; font-weight: 700; color: var(--samastha-green); margin-bottom: 15px; }
+        .divider { height: 2px; background: linear-gradient(to right, transparent, var(--primary-gold), transparent); margin-bottom: 20px; }
+
+        .form-group { text-align: left; margin-bottom: 18px; }
+        .form-group label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--dark-brown); }
+        .form-group input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 1.1rem; font-weight: 600; background: #faf9f5; }
+        .form-group input:focus { outline: none; border-color: var(--primary-gold); background: #fff; }
+
+        .file-upload-wrapper { border: 2px dashed var(--primary-gold); background: #fdfbf7; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; margin-bottom: 20px; }
+        .file-upload-wrapper i { font-size: 2rem; color: var(--primary-gold); margin-bottom: 8px; }
+        .file-upload-wrapper p { font-size: 0.95rem; font-weight: bold; }
+        #photoInput { display: none; }
+
+        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn-generate { background: linear-gradient(135deg, #c5a03b 0%, #aa842c 100%); color: #fff; }
+        .btn-generate:hover { transform: translateY(-2px); }
+        .btn-download { background: linear-gradient(135deg, #198754 0%, #11623c 100%); color: #fff; margin-top: 15px; display: none; }
+
+        .preview-zone { margin-top: 25px; display: none; }
+        .preview-zone h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark-brown); font-weight: 800; }
+        
+        /* ഒറിജിനൽ ഇമേജിന്റെ അതേ 3:4 റേഷ്യോയിലേക്ക് കാൻവാസ് സൈസ് മാറ്റി */
+        canvas { width: 100%; border-radius: 12px; border: 2px solid var(--primary-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: block; background-color: #fff; }
+
+        .footer-tag { margin-top: 25px; font-size: 0.9rem; font-weight: bold; color: #5c5343; line-height: 1.5; border-top: 1px dashed var(--primary-gold); padding-top: 15px; }
+        .author-name { color: #a12328; font-weight: 800; font-size: 1rem; margin-top: 3px; display: inline-block; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header-zone">
+            <img id="headerLogo" class="centenary-logo" alt="Samastha Centenary Logo">
+            <h1>SAMASTHA CENTENARY</h1>
+            <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
+            <div class="divider"></div>
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
+            <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
+        </div>
+
+        <div class="form-group">
+            <label><i class="fa-solid fa-location-dot"></i> സ്ഥലം (Place)</label>
+            <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
+        </div>
+
+        <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
+        <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <p id="uploadStatusText">ക്ലിക്ക് ചെയ്ത് ഫോട്ടോ തിരഞ്ഞെടുക്കുക</p>
+            <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
+        </div>
+
+        <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
+        <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
+
+        <div class="preview-zone" id="previewArea">
+            <div class="divider" style="margin-top: 20px;"></div>
+            <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
+            <canvas id="inviteCanvas" width="600" height="800"></canvas>
+        </div>
+
+        <div class="footer-tag">
+            Developed by ATAVA DIGITAL SERVICES & TRADING <br>
+            <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
+        </div>
+    </div>
+
+<script>
+    // 1. ലോഗോ നേരിട്ട് ടെക്സ്റ്റ് ഡാറ്റയായി കോഡിലേക്ക് കയറ്റി (CORS പ്രോബ്ലം വരില്ല)
+    const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAAB49nmBAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUwUExURf8A//8A/wD//wD/AP///////wAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/C05fY2EAAAM0UExURf96df96df96df95df95df95dv95dv95dv95dv95dv95dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv
