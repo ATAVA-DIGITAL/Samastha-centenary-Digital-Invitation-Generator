@@ -47,7 +47,7 @@
         /* Live Preview Area */
         .preview-zone { margin-top: 25px; display: none; }
         .preview-zone h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark-brown); font-weight: 800; }
-        canvas { width: 100%; border-radius: 12px; border: 2px solid var(--primary-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: block; }
+        canvas { width: 100%; border-radius: 12px; border: 2px solid var(--primary-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: block; background-color: #fff; }
 
         /* Branding Footer */
         .footer-tag { margin-top: 25px; font-size: 0.9rem; font-weight: bold; color: #5c5343; line-height: 1.5; border-top: 1px dashed var(--primary-gold); padding-top: 15px; }
@@ -92,8 +92,8 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- ഒറിജിനൽ ഡിസൈനിന്റെ അതേ ആസ്പെക്ട് റേഷ്യോ കീപ്പ് ചെയ്യാൻ വലിപ്പം അഡ്ജസ്റ്റ് ചെയ്തു -->
-            <canvas id="inviteCanvas" width="800" height="1000"></canvas>
+            <!-- ഒറിജിനൽ ഇമേജിന്റെ കൃത്യമായ റേഷ്യോയിലേക്ക് (512x640) മാറ്റി -->
+            <canvas id="inviteCanvas" width="512" height="640"></canvas>
         </div>
 
         <!-- BRANDING FOOTER -->
@@ -105,8 +105,6 @@
 
 <script>
     let uploadedImageBase64 = null;
-    const bgImg = new Image();
-    bgImg.src = 'bg.jpg'; // ഒറിജിനൽ സമ്മേളന പോസ്റ്റർ ബാക്ക്ഗ്രൗണ്ട് ഫയൽ
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -137,50 +135,69 @@
             return;
         }
 
+        // പ്രിവ്യൂ ഏരിയ കാണിക്കുന്നു
         document.getElementById('previewArea').style.display = 'block';
 
-        // 1. ഒറിജിനൽ പോസ്റ്റർ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് കാൻവാസിലേക്ക് നേരിട്ട് വരയ്ക്കുന്നു
-        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ഒബ്ജക്റ്റ് ഉണ്ടാക്കുന്നു
+        const bgImg = new Image();
+        bgImg.src = 'bg.jpg'; 
 
-        // 2. യൂസറുടെ ഫോട്ടോ ലോഡ് ചെയ്യുന്നു (പോസ്റ്ററിലെ സൂര്യന്റെ ഭാഗത്തോ അല്ലെങ്കിൽ ഇടത് വശത്തോ ഭംഗിയായി പ്ലേസ് ചെയ്യാം)
-        // ഇവിടെ ഡിസൈൻ കേടാകാത്ത രീതിയിൽ ഇടതുവശത്ത് മുകളിലായി ഒരു റൗണ്ട് ഫ്രെയിമിൽ ഫോട്ടോ സെറ്റ് ചെയ്യുന്നു
-        const userImg = new Image();
-        userImg.src = uploadedImageBase64;
-        userImg.onload = function() {
-            ctx.save();
-            ctx.beginPath();
-            // ഫോട്ടോയുടെ സ്ഥാനം (X: 180, Y: 330, Radius: 85) - ഡിസൈനിന് അനുയോജ്യമായി മാറ്റാം
-            ctx.arc(180, 330, 85, 0, Math.PI * 2); 
-            ctx.clip();
-            ctx.drawImage(userImg, 95, 245, 170, 170);
-            ctx.restore();
+        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് പൂർണ്ണമായി ലോഡ് ആയാൽ മാത്രം ബാക്കി കാര്യങ്ങൾ ചെയ്യുക (ഇതാണ് ബ്ലാങ്ക് ആകാതിരിക്കാനുള്ള വഴി)
+        bgImg.onload = function() {
+            // കാൻവാസിലേക്ക് ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
+            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-            // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു ചെറിയ പ്രീമിയം വൈറ്റ്/ഗോൾഡ് ബോർഡർ
-            ctx.strokeStyle = '#ffffff';
-            ctx.lineWidth = 4;
-            ctx.beginPath();
-            ctx.arc(180, 330, 86, 0, Math.PI * 2);
-            ctx.stroke();
+            // 2. യൂസറുടെ ഫോട്ടോ ലോഡ് ചെയ്യുന്നു
+            const userImg = new Image();
+            userImg.src = uploadedImageBase64;
+            userImg.onload = function() {
+                ctx.save();
+                ctx.beginPath();
+                // പോസ്റ്ററിലെ ഡിസൈൻ അനുസരിച്ച് മുകളിൽ വലതുവശത്തെ ശൂന്യമായ സ്ഥലത്തേക്ക് മാറ്റി (X: 380, Y: 150, Radius: 60)
+                ctx.arc(380, 150, 60, 0, Math.PI * 2); 
+                ctx.clip();
+                ctx.drawImage(userImg, 320, 90, 120, 120);
+                ctx.restore();
 
-            // 3. വ്യക്തിഗത ക്ഷണം എഴുതുന്ന ഭാഗം (പോസ്റ്ററിലെ പ്രധാന എഴുത്തുകൾക്ക് താഴെയായി)
-            ctx.fillStyle = '#831a1e'; // കട്ട റെഡ് കളർ
-            ctx.font = '800 32px sans-serif';
-            ctx.textAlign = 'center';
+                // ഫോട്ടോയ്ക്ക് ഒരു ഗോൾഡൻ റിങ് ബോർഡർ
+                ctx.strokeStyle = '#c5a03b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(380, 150, 61, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // 3. പേരും സ്ഥലവും എഴുതുന്നു (താഴെ ശൂന്യമായ വെള്ള ഭാഗത്ത്)
+                ctx.textAlign = 'center';
+                
+                // പേര് (കട്ട റെഡ് കളറിൽ വലിയ ഫോണ്ടിൽ)
+                ctx.fillStyle = '#991b1b'; 
+                ctx.font = 'bold 26px sans-serif';
+                ctx.fillText(name, 256, 490); 
+                
+                // സ്ഥലം (ഗ്രീൻ കളറിൽ)
+                ctx.fillStyle = '#166534'; 
+                ctx.font = '600 18px sans-serif';
+                ctx.fillText(place, 256, 525);
+
+                // ചെറിയൊരു സ്വാഗത വാചകം കൂടി താഴെ
+                ctx.fillStyle = '#451a03';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
+
+                // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
+                document.getElementById('downloadBtn').style.display = 'inline-flex';
+                document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
+            };
             
-            // പേരും സ്ഥലവും പോസ്റ്ററിന്റെ താഴത്തെ ഭാഗത്ത് വൃത്തിയായി പ്രിന്റ് ചെയ്യുന്നു
-            ctx.fillText(name, 400, 780); 
-            
-            ctx.fillStyle = '#198754'; // സമസ്ത ഗ്രീൻ കളർ
-            ctx.font = 'bold 24px sans-serif';
-            ctx.fillText(place, 400, 820);
+            // ഇൻ കേസ് യൂസർ ഇമേജ് ലോഡിങ്ങിൽ എന്തെങ്കിലും ഇഷ്യൂ ഉണ്ടായാൽ
+            userImg.onerror = function() {
+                alert("ഫോട്ടോ ലോഡ് ചെയ്യാൻ പറ്റിയില്ല ബ്രോ, വേറെ ഫോട്ടോ ട്രൈ ചെയ്യൂ.");
+            };
+        };
 
-            ctx.fillStyle = '#2c2519';
-            ctx.font = 'bold 20px sans-serif';
-            ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ ആദരവോടെ ക്ഷണിക്കുന്നു", 400, 855);
-
-            // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
-            document.getElementById('downloadBtn').style.display = 'inline-flex';
-            document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
+        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ഫയൽ കാണാനില്ലെങ്കിൽ
+        bgImg.onerror = function() {
+            alert("ഫയൽ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല! 'bg.jpg' എന്ന പേരിൽ തന്നെയാണോ ഇമേജ് സേവ് ചെയ്തത് എന്ന് ഉറപ്പ് വരുത്തുക ബ്രോ.");
         };
     }
 
