@@ -19,37 +19,31 @@
 
         .container { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 3px solid var(--primary-gold); text-align: center; }
         
-        /* Centenary Header */
         .header-zone { margin-bottom: 25px; position: relative; }
         .centenary-logo { width: 100px; height: auto; margin-bottom: 10px; }
         h1 { font-size: 1.6rem; font-weight: 900; color: #a12328; margin-bottom: 5px; }
         p.subtitle { font-size: 1rem; font-weight: 700; color: var(--samastha-green); margin-bottom: 15px; }
         .divider { height: 2px; background: linear-gradient(to right, transparent, var(--primary-gold), transparent); margin-bottom: 20px; }
 
-        /* Form Controls */
         .form-group { text-align: left; margin-bottom: 18px; }
         .form-group label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--dark-brown); }
         .form-group input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 1.1rem; font-weight: 600; background: #faf9f5; }
         .form-group input:focus { outline: none; border-color: var(--primary-gold); background: #fff; }
 
-        /* File Upload Dropzone */
         .file-upload-wrapper { border: 2px dashed var(--primary-gold); background: #fdfbf7; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; margin-bottom: 20px; }
         .file-upload-wrapper i { font-size: 2rem; color: var(--primary-gold); margin-bottom: 8px; }
         .file-upload-wrapper p { font-size: 0.95rem; font-weight: bold; }
         #photoInput { display: none; }
 
-        /* Action Buttons */
         .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .btn-generate { background: linear-gradient(135deg, #c5a03b 0%, #aa842c 100%); color: #fff; }
         .btn-generate:hover { transform: translateY(-2px); }
         .btn-download { background: linear-gradient(135deg, #198754 0%, #11623c 100%); color: #fff; margin-top: 15px; display: none; }
 
-        /* Live Preview Area */
         .preview-zone { margin-top: 25px; display: none; }
         .preview-zone h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark-brown); font-weight: 800; }
         canvas { width: 100%; border-radius: 12px; border: 2px solid var(--primary-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: block; background-color: #fff; }
 
-        /* Branding Footer */
         .footer-tag { margin-top: 25px; font-size: 0.9rem; font-weight: bold; color: #5c5343; line-height: 1.5; border-top: 1px dashed var(--primary-gold); padding-top: 15px; }
         .author-name { color: #a12328; font-weight: 800; font-size: 1rem; margin-top: 3px; display: inline-block; }
     </style>
@@ -59,8 +53,7 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header-zone">
-            <!-- ലോക്കൽ ഫയൽ കിട്ടിയില്ലെങ്കിൽ ഓൺലൈൻ ലിങ്കിൽ നിന്ന് ലോഗോ ലോഡ് ചെയ്യും -->
-            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.src='https://i.ibb.co/6wX987h/logo.png'">
+            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
@@ -105,6 +98,10 @@
 
 <script>
     let uploadedImageBase64 = null;
+    
+    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ തന്നെ നിന്റെ ലോക്കൽ ഫോൾഡറിലുള്ള bg.jpg മുൻകൂട്ടി ലോഡ് ചെയ്തു വെക്കുന്നു
+    const bgImg = new Image();
+    bgImg.src = 'bg.jpg'; 
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -135,61 +132,51 @@
             return;
         }
 
+        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് പൂർണ്ണമായി ലോഡ് ആയോ എന്ന് മാത്രം ഉറപ്പുവരുത്തുക
+        if (!bgImg.complete || bgImg.naturalWidth === 0) {
+            alert("ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് (bg.jpg) ഇനിയും ലോഡ് ആയിട്ടില്ല ബ്രോ. ഒന്നുകൂടി പേജ് റിഫ്രഷ് ചെയ്ത് നോക്കൂ, അല്ലെങ്കിൽ ഫയൽ ഫോൾഡറിൽ ഉണ്ടെന്ന് ഉറപ്പാക്കൂ.");
+            return;
+        }
+
         document.getElementById('previewArea').style.display = 'block';
 
-        // 1. ഒറിജിനൽ ഡിസൈൻ പോസ്റ്റർ (Imgur/Cloud ഹോസ്റ്റിംഗ് വഴി ബാക്ക്ഗ്രൗണ്ട് ഡയറക്ട് ലോഡ് ചെയ്യുന്നു)
-        const bgImg = new Image();
-        bgImg.crossOrigin = "anonymous"; // GitHub Pages-ൽ കാൻവാസ് ഡൗൺലോഡ് എറർ വരാതിരിക്കാൻ
-        bgImg.src = 'https://i.ibb.co/YbyS7Xf/bg.jpg'; 
+        // 1. ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
+        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        bgImg.onload = function() {
-            ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        // 2. യൂസറുടെ ഫോട്ടോ വരയ്ക്കുന്നു
+        const userImg = new Image();
+        userImg.src = uploadedImageBase64;
+        userImg.onload = function() {
+            ctx.save();
+            ctx.beginPath();
+            ctx.arc(380, 150, 60, 0, Math.PI * 2); 
+            ctx.clip();
+            ctx.drawImage(userImg, 320, 90, 120, 120);
+            ctx.restore();
 
-            // 2. യൂസറുടെ ഫോട്ടോ ലോഡ് ചെയ്യുന്നു
-            const userImg = new Image();
-            userImg.src = uploadedImageBase64;
-            userImg.onload = function() {
-                ctx.save();
-                ctx.beginPath();
-                // പോസ്റ്റർ ഡിസൈൻ അനുസരിച്ച് ഫോട്ടോയുടെ കൃത്യമായ സ്ഥാനം (മുകളിൽ വലത്ത്)
-                ctx.arc(380, 150, 60, 0, Math.PI * 2); 
-                ctx.clip();
-                ctx.drawImage(userImg, 320, 90, 120, 120);
-                ctx.restore();
+            ctx.strokeStyle = '#c5a03b';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.arc(380, 150, 61, 0, Math.PI * 2);
+            ctx.stroke();
 
-                // ഫോട്ടോയ്ക്ക് ചുറ്റും ഗോൾഡൻ ബോർഡർ റിങ്
-                ctx.strokeStyle = '#c5a03b';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.arc(380, 150, 61, 0, Math.PI * 2);
-                ctx.stroke();
+            // 3. ടെക്സ്റ്റുകൾ പ്രിന്റ് ചെയ്യുന്നു
+            ctx.textAlign = 'center';
+            
+            ctx.fillStyle = '#991b1b'; 
+            ctx.font = 'bold 26px sans-serif';
+            ctx.fillText(name, 256, 490); 
+            
+            ctx.fillStyle = '#166534'; 
+            ctx.font = '600 18px sans-serif';
+            ctx.fillText(place, 256, 525);
 
-                // 3. പേരും സ്ഥലവും താഴത്തെ വെള്ള ഭാഗത്ത് പ്രിന്റ് ചെയ്യുന്നു
-                ctx.textAlign = 'center';
-                
-                // പേര് (കട്ട റെഡ് കളർ)
-                ctx.fillStyle = '#991b1b'; 
-                ctx.font = 'bold 26px sans-serif';
-                ctx.fillText(name, 256, 490); 
-                
-                // സ്ഥലം (ഗ്രീൻ കളർ)
-                ctx.fillStyle = '#166534'; 
-                ctx.font = '600 18px sans-serif';
-                ctx.fillText(place, 256, 525);
+            ctx.fillStyle = '#451a03';
+            ctx.font = 'bold 15px sans-serif';
+            ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
 
-                // സന്ദേശം
-                ctx.fillStyle = '#451a03';
-                ctx.font = 'bold 15px sans-serif';
-                ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
-
-                // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
-                document.getElementById('downloadBtn').style.display = 'inline-flex';
-                document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
-            };
-        };
-
-        bgImg.onerror = function() {
-            alert("ഓൺലൈൻ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡ് ചെയ്യാൻ പറ്റിയില്ല ബ്രോ. ഇന്റർനെറ്റ് കണക്ഷൻ ചെക്ക് ചെയ്യൂ.");
+            document.getElementById('downloadBtn').style.display = 'inline-flex';
+            document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
         };
     }
 
