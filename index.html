@@ -52,7 +52,7 @@
 
     <div class="container">
         <div class="header-zone">
-            <img src="https://raw.githubusercontent.com/atava-digital/atava-digital.github.io/main/logo.png" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.src='logo.png'">
+            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
@@ -93,10 +93,9 @@
 <script>
     let uploadedImageBase64 = null;
     
-    // ഡയറക്ട് GitHub ലിങ്ക് വഴി ബാക്ക്ഗ്രൗണ്ട് മുൻകൂട്ടി ലോഡ് ചെയ്യുന്നു
+    // സെക്യൂരിറ്റി പ്രശ്നങ്ങൾ ഇല്ലാതാക്കാൻ നമ്മൾ വെബ്സൈറ്റിൽ നിന്നും നേരിട്ട് ഇമേജ് റീഡ് ചെയ്യുന്നു
     const bgImg = new Image();
-    bgImg.crossOrigin = "anonymous"; // ഡൗൺലോഡ് ചെയ്യുമ്പോൾ CORS ബ്ലോക്ക് വരാതിരിക്കാൻ
-    bgImg.src = 'https://raw.githubusercontent.com/atava-digital/atava-digital.github.io/main/bg.jpg'; 
+    bgImg.src = 'bg.jpg'; 
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -127,54 +126,54 @@
             return;
         }
 
-        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡിങ് ബാക്കപ്പ് ചെക്ക്
-        if (!bgImg.complete || bgImg.naturalWidth === 0) {
-            // ഒന്നുകൂടി ഫയൽ ലോഡ് ചെയ്യാൻ ട്രൈ ചെയ്യുന്നു
-            bgImg.src = 'bg.jpg';
-            alert("ചെറിയൊരു നെറ്റ്‌വർക്ക് താമസം ഉണ്ട് ബ്രോ, ദയവായി ഒരു 2 സെക്കൻഡ് കഴിഞ്ഞ് ഒന്നുകൂടി ക്ലിക്ക് ചെയ്യൂ!");
-            return;
-        }
-
         document.getElementById('previewArea').style.display = 'block';
 
-        // 1. ബാക്ക്ഗ്രൗണ്ട് ഡിസൈൻ വരയ്ക്കുന്നു
-        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        // വിശ്വസ്തമായ രീതിയിൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് കാൻവാസിലേക്ക് മാറ്റുന്നു
+        // ഇത് വഴി സെക്യൂരിറ്റി ബ്ലോക്കോ എററോ ഉണ്ടാകില്ല
+        const renderBg = new Image();
+        renderBg.onload = function() {
+            // 1. ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
+            ctx.drawImage(renderBg, 0, 0, canvas.width, canvas.height);
 
-        // 2. യൂസറുടെ ഫോട്ടോ സെറ്റ് ചെയ്യുന്നു
-        const userImg = new Image();
-        userImg.src = uploadedImageBase64;
-        userImg.onload = function() {
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(380, 150, 60, 0, Math.PI * 2); 
-            ctx.clip();
-            ctx.drawImage(userImg, 320, 90, 120, 120);
-            ctx.restore();
+            // 2. യൂസറുടെ ഫോട്ടോ വരയ്ക്കുന്നു
+            const userImg = new Image();
+            userImg.onload = function() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(380, 150, 60, 0, Math.PI * 2); 
+                ctx.clip();
+                ctx.drawImage(userImg, 320, 90, 120, 120);
+                ctx.restore();
 
-            ctx.strokeStyle = '#c5a03b';
-            ctx.lineWidth = 3;
-            ctx.beginPath();
-            ctx.arc(380, 150, 61, 0, Math.PI * 2);
-            ctx.stroke();
+                ctx.strokeStyle = '#c5a03b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(380, 150, 61, 0, Math.PI * 2);
+                ctx.stroke();
 
-            // 3. പേരും വിവരങ്ങളും ഒറിജിനൽ ഡിസൈനിന് മാച്ചായി പ്രിന്റ് ചെയ്യുന്നു
-            ctx.textAlign = 'center';
-            
-            ctx.fillStyle = '#991b1b'; 
-            ctx.font = 'bold 26px sans-serif';
-            ctx.fillText(name, 256, 490); 
-            
-            ctx.fillStyle = '#166534'; 
-            ctx.font = '600 18px sans-serif';
-            ctx.fillText(place, 256, 525);
+                // 3. മനോഹരമായ ഫോണ്ടുകളിൽ വിവരങ്ങൾ എഴുതുന്നു
+                ctx.textAlign = 'center';
+                
+                ctx.fillStyle = '#991b1b'; 
+                ctx.font = 'bold 26px sans-serif';
+                ctx.fillText(name, 256, 490); 
+                
+                ctx.fillStyle = '#166534'; 
+                ctx.font = '600 18px sans-serif';
+                ctx.fillText(place, 256, 525);
 
-            ctx.fillStyle = '#451a03';
-            ctx.font = 'bold 15px sans-serif';
-            ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
+                ctx.fillStyle = '#451a03';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
 
-            document.getElementById('downloadBtn').style.display = 'inline-flex';
-            document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('downloadBtn').style.display = 'inline-flex';
+                document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
+            };
+            userImg.src = uploadedImageBase64;
         };
+        
+        // ലോക്കൽ ഫയലിനെ ഡയറക്ട് കാൻവാസ് റീഡിംഗിനായി സെറ്റ് ചെയ്യുന്നു
+        renderBg.src = 'bg.jpg';
     }
 
     function downloadImage() {
