@@ -55,7 +55,7 @@
         <div class="header-zone">
             <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
-            <p class="subtitle">100-ാം വാർഷിക സന്ദേശം</p>
+            <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
         </div>
 
@@ -117,38 +117,66 @@
     }
 
     function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
-        // 1. ബാക്ക്ഗ്രൗണ്ട് പോസ്റ്റർ വരയ്ക്കുന്നു
+        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വൃത്തിയായി വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // 2. യൂസറുടെ ഫോട്ടോ മുകളിൽ ഇടതുവശത്ത് വട്ടത്തിൽ ഡിസൈൻ ചെയ്യുന്നു
-        ctx.save();
+        // --- സൂപ്പർ പ്രൊഫഷണൽ ബോക്സ് ലെയർ ഡിസൈൻ ---
+        // പോസ്റ്ററിന്റെ താഴെ ഇടതുവശത്തുള്ള കാലിയായ സ്പേസിൽ വിവരങ്ങൾ വെക്കാൻ ഒരു ലൈറ്റ് ക്രീം ബാക്ക്ഗ്രൗണ്ട് ഫ്രെയിം വരയ്ക്കുന്നു
+        ctx.fillStyle = "rgba(24df, 245, 235, 0.9)"; // മാച്ചിങ് സോഫ്റ്റ് ബാക്ക്ഗ്രൗണ്ട്
+        ctx.strokeStyle = "#c5a03b"; // ഗോൾഡൻ ബോർഡർ
+        ctx.lineWidth = 2;
+        
+        // റൗണ്ടഡ് ബോക്സ് ഫോർ യൂസർ ഡീറ്റെയിൽസ്
+        const boxX = 35;
+        const boxY = 660;
+        const boxWidth = 380;
+        const boxHeight = 100;
+        const radius = 15;
+        
         ctx.beginPath();
-        ctx.arc(160, 220, 55, 0, Math.PI * 2); 
-        ctx.clip();
-        ctx.drawImage(userImg, 105, 165, 110, 110);
-        ctx.restore();
-
-        // ഫോട്ടോയ്ക്ക് ബോർഡർ
-        ctx.strokeStyle = '#c5a03b';
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.arc(160, 220, 56, 0, Math.PI * 2);
+        ctx.moveTo(boxX + radius, boxY);
+        ctx.lineTo(boxX + boxWidth - radius, boxY);
+        ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
+        ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
+        ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
+        ctx.lineTo(boxX + radius, boxY + boxHeight);
+        ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
+        ctx.lineTo(boxX, boxY + radius);
+        ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
+        ctx.closePath();
+        ctx.fill();
         ctx.stroke();
 
-        // 3. പേരും സ്ഥലവും താഴെ വലതുവശത്ത് നല്ല ഭംഗിയായി അറ്റാച്ച് ചെയ്യുന്നു
-        ctx.textAlign = 'center';
-        
-        // പേര് ഡിസൈൻ (Bold Red)
-        ctx.fillStyle = '#be123c'; 
-        ctx.font = 'bold 28px sans-serif';
-        ctx.fillText(name, 485, 660); 
-        
-        // സ്ഥലം ഡിസൈൻ (Green)
-        ctx.fillStyle = '#15803d'; 
-        ctx.font = '600 20px sans-serif';
-        ctx.fillText(place, 485, 695);
+        // 2. അപ്‌ലോഡ് ചെയ്ത ഫോട്ടോ ആ ബോക്സിനുള്ളിൽ വട്ടത്തിൽ വെക്കുന്നു
+        ctx.save();
+        ctx.beginPath();
+        // ഫോട്ടോ കൃത്യമായി ബോക്സിനുള്ളിൽ ഇടതുവശത്ത് അലൈൻ ചെയ്യുന്നു (X: 85, Y: 710, Radius: 40)
+        ctx.arc(85, 710, 40, 0, Math.PI * 2); 
+        ctx.clip();
+        ctx.drawImage(userImg, 45, 670, 80, 80);
+        ctx.restore();
 
-        // ലോഡിങ് കഴിഞ്ഞ് ബട്ടൺ കാണിക്കുന്നു
+        // ഫോട്ടോയുടെ ഗോൾഡൻ ഫ്രെയിം ബോർഡർ
+        ctx.strokeStyle = '#c5a03b';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(85, 710, 41, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 3. പേരും സ്ഥലവും ബോക്സിനുള്ളിൽ വലതുവശത്തായി വൃത്തിയായി എഴുതുന്നു
+        ctx.textAlign = 'left';
+        
+        // പേര് ഡിസൈൻ (Samastha Dark Red - Bold & Professional)
+        ctx.fillStyle = '#a12328'; 
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText(name, 145, 705); 
+        
+        // സ്ഥലം ഡിസൈൻ (Samastha Green - Clean)
+        ctx.fillStyle = '#198754'; 
+        ctx.font = '600 18px sans-serif';
+        ctx.fillText(place, 145, 735);
+
+        // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
         document.getElementById('downloadBtn').style.display = 'inline-flex';
         document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
     }
@@ -187,9 +215,8 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
-        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡിങ് ഇറർ വന്നാൽ കൈകാര്യം ചെയ്യാൻ
         renderBg.onerror = function() {
-            renderBg.src = 'bg.jpg.jpg'; // ബാക്കപ്പ് ഫയൽ നെയിം ട്രൈ ചെയ്യുന്നു
+            renderBg.src = 'bg.jpg.jpg'; 
         };
 
         renderBg.src = 'bg.jpg';
