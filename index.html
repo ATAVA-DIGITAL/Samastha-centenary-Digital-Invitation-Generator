@@ -51,7 +51,6 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <div class="header-zone">
             <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
@@ -59,7 +58,6 @@
             <div class="divider"></div>
         </div>
 
-        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -70,7 +68,6 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
-        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -78,18 +75,15 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
-        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
-        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
             <canvas id="inviteCanvas" width="600" height="800"></canvas>
         </div>
 
-        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -117,66 +111,58 @@
     }
 
     function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
-        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വൃത്തിയായി വരയ്ക്കുന്നു
+        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // --- സൂപ്പർ പ്രൊഫഷണൽ ബോക്സ് ലെയർ ഡിസൈൻ ---
-        // പോസ്റ്ററിന്റെ താഴെ ഇടതുവശത്തുള്ള കാലിയായ സ്പേസിൽ വിവരങ്ങൾ വെക്കാൻ ഒരു ലൈറ്റ് ക്രീം ബാക്ക്ഗ്രൗണ്ട് ഫ്രെയിം വരയ്ക്കുന്നു
-        ctx.fillStyle = "rgba(24df, 245, 235, 0.9)"; // മാച്ചിങ് സോഫ്റ്റ് ബാക്ക്ഗ്രൗണ്ട്
-        ctx.strokeStyle = "#c5a03b"; // ഗോൾഡൻ ബോർഡർ
-        ctx.lineWidth = 2;
+        // --- പ്രൊഫഷണൽ ഫോട്ടോ & ടെക്സ്റ്റ് എഡിറ്റിംഗ് ലെയർ (താഴെ ഇടതുവശത്തെ സ്പേസ്) ---
         
-        // റൗണ്ടഡ് ബോക്സ് ഫോർ യൂസർ ഡീറ്റെയിൽസ്
-        const boxX = 35;
-        const boxY = 660;
-        const boxWidth = 380;
-        const boxHeight = 100;
-        const radius = 15;
-        
-        ctx.beginPath();
-        ctx.moveTo(boxX + radius, boxY);
-        ctx.lineTo(boxX + boxWidth - radius, boxY);
-        ctx.quadraticCurveTo(boxX + boxWidth, boxY, boxX + boxWidth, boxY + radius);
-        ctx.lineTo(boxX + boxWidth, boxY + boxHeight - radius);
-        ctx.quadraticCurveTo(boxX + boxWidth, boxY + boxHeight, boxX + boxWidth - radius, boxY + boxHeight);
-        ctx.lineTo(boxX + radius, boxY + boxHeight);
-        ctx.quadraticCurveTo(boxX, boxY + boxHeight, boxX, boxY + boxHeight - radius);
-        ctx.lineTo(boxX, boxY + radius);
-        ctx.quadraticCurveTo(boxX, boxY, boxX + radius, boxY);
-        ctx.closePath();
-        ctx.fill();
-        ctx.stroke();
+        // ഫോട്ടോ വട്ടത്തിൽ വെക്കാൻ ആവശ്യമായ അളവുകൾ (X: 100, Y: 710, Radius: 45)
+        const photoX = 100;
+        const photoY = 710;
+        const radius = 45;
 
-        // 2. അപ്‌ലോഡ് ചെയ്ത ഫോട്ടോ ആ ബോക്സിനുള്ളിൽ വട്ടത്തിൽ വെക്കുന്നു
+        // ഫോട്ടോയുടെ താഴെ ഒരു ചെറിയ പ്രൊഫഷണൽ ഷാഡോ ഇഫക്റ്റ്
         ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+        ctx.shadowBlur = 10;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 4;
+        ctx.fillStyle = "#ffffff";
         ctx.beginPath();
-        // ഫോട്ടോ കൃത്യമായി ബോക്സിനുള്ളിൽ ഇടതുവശത്ത് അലൈൻ ചെയ്യുന്നു (X: 85, Y: 710, Radius: 40)
-        ctx.arc(85, 710, 40, 0, Math.PI * 2); 
-        ctx.clip();
-        ctx.drawImage(userImg, 45, 670, 80, 80);
+        ctx.arc(photoX, photoY, radius, 0, Math.PI * 2);
+        ctx.fill();
         ctx.restore();
 
-        // ഫോട്ടോയുടെ ഗോൾഡൻ ഫ്രെയിം ബോർഡർ
-        ctx.strokeStyle = '#c5a03b';
-        ctx.lineWidth = 2;
+        // യൂസറുടെ ഫോട്ടോ ക്ലിപ്പ് ചെയ്ത് കറക്റ്റ് ലെയറിൽ വെക്കുന്നു
+        ctx.save();
         ctx.beginPath();
-        ctx.arc(85, 710, 41, 0, Math.PI * 2);
+        ctx.arc(photoX, photoY, radius, 0, Math.PI * 2); 
+        ctx.clip();
+        // ഫോട്ടോ സ്ക്വയർ ആയാലും റൗണ്ടിൽ കൃത്യമായി ഫിറ്റ് ചെയ്യാനുള്ള സൈസ് അഡ്ജസ്റ്റ്മെന്റ്
+        ctx.drawImage(userImg, photoX - radius, photoY - radius, radius * 2, radius * 2);
+        ctx.restore();
+
+        // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു റോയൽ ഗോൾഡൻ ഫ്രെയിം ബോർഡർ
+        ctx.strokeStyle = '#c5a03b';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(photoX, photoY, radius + 1, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 3. പേരും സ്ഥലവും ബോക്സിനുള്ളിൽ വലതുവശത്തായി വൃത്തിയായി എഴുതുന്നു
+        // 3. പേരും സ്ഥലവും ഫോട്ടോയുടെ തൊട്ടടുത്ത് (വലതുവശത്ത്) വൃത്തിയായി എഴുതുന്നു
         ctx.textAlign = 'left';
         
-        // പേര് ഡിസൈൻ (Samastha Dark Red - Bold & Professional)
+        // പേര് ഡിസൈൻ (Samastha Dark Red - Bold & Clean)
         ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 24px sans-serif';
-        ctx.fillText(name, 145, 705); 
+        ctx.font = 'bold 26px sans-serif';
+        ctx.fillText(name, photoX + radius + 20, photoY - 5); 
         
-        // സ്ഥലം ഡിസൈൻ (Samastha Green - Clean)
+        // സ്ഥലം ഡിസൈൻ (Samastha Green)
         ctx.fillStyle = '#198754'; 
-        ctx.font = '600 18px sans-serif';
-        ctx.fillText(place, 145, 735);
+        ctx.font = '600 19px sans-serif';
+        ctx.fillText(place, photoX + radius + 20, photoY + 25);
 
-        // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
+        // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
         document.getElementById('downloadBtn').style.display = 'inline-flex';
         document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
     }
@@ -188,11 +174,11 @@
         const ctx = canvas.getContext('2d');
 
         if(!name || !place) {
-            alert("ദയവായി പേരും സ്ഥലവും കൃത്യമായി ടൈപ്പ് ചെയ്യുക ബ്രോ!");
+            alert("ദയവായി പേരും സ്ഥലവും കൃത്യമായി ടൈപ്പ് ചെയ്യൂ ബ്രോ!");
             return;
         }
         if(!uploadedImageBase64) {
-            alert("ക്ഷണക്കത്തിൽ വെക്കാൻ ഒരു അടിപൊളി ഫോട്ടോ കൂടി അപ്‌ലോഡ് ചെയ്യ് ബ്രോ!");
+            alert("ക്ഷണക്കത്തിൽ വെക്കാൻ ഒരു ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ ബ്രോ!");
             return;
         }
 
@@ -215,6 +201,7 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
+        // GitHub ഹോസ്റ്റിംഗിൽ വരുന്ന പേരിന്റെ വ്യത്യാസം പരിഹരിക്കാൻ ബാക്കപ്പ് ലോഡിങ്
         renderBg.onerror = function() {
             renderBg.src = 'bg.jpg.jpg'; 
         };
