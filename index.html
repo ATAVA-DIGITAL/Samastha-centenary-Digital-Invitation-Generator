@@ -59,7 +59,8 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header-zone">
-            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.style.display='none'">
+            <!-- ലോക്കൽ ഫയൽ കിട്ടിയില്ലെങ്കിൽ ഓൺലൈൻ ലിങ്കിൽ നിന്ന് ലോഗോ ലോഡ് ചെയ്യും -->
+            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.src='https://i.ibb.co/6wX987h/logo.png'">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
@@ -92,7 +93,6 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- ഒറിജിനൽ ഇമേജിന്റെ കൃത്യമായ റേഷ്യോയിലേക്ക് (512x640) മാറ്റി -->
             <canvas id="inviteCanvas" width="512" height="640"></canvas>
         </div>
 
@@ -135,16 +135,14 @@
             return;
         }
 
-        // പ്രിവ്യൂ ഏരിയ കാണിക്കുന്നു
         document.getElementById('previewArea').style.display = 'block';
 
-        // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ഒബ്ജക്റ്റ് ഉണ്ടാക്കുന്നു
+        // 1. ഒറിജിനൽ ഡിസൈൻ പോസ്റ്റർ (Imgur/Cloud ഹോസ്റ്റിംഗ് വഴി ബാക്ക്ഗ്രൗണ്ട് ഡയറക്ട് ലോഡ് ചെയ്യുന്നു)
         const bgImg = new Image();
-        bgImg.src = 'bg.jpg'; 
+        bgImg.crossOrigin = "anonymous"; // GitHub Pages-ൽ കാൻവാസ് ഡൗൺലോഡ് എറർ വരാതിരിക്കാൻ
+        bgImg.src = 'https://i.ibb.co/YbyS7Xf/bg.jpg'; 
 
-        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് പൂർണ്ണമായി ലോഡ് ആയാൽ മാത്രം ബാക്കി കാര്യങ്ങൾ ചെയ്യുക (ഇതാണ് ബ്ലാങ്ക് ആകാതിരിക്കാനുള്ള വഴി)
         bgImg.onload = function() {
-            // കാൻവാസിലേക്ക് ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
             // 2. യൂസറുടെ ഫോട്ടോ ലോഡ് ചെയ്യുന്നു
@@ -153,33 +151,33 @@
             userImg.onload = function() {
                 ctx.save();
                 ctx.beginPath();
-                // പോസ്റ്ററിലെ ഡിസൈൻ അനുസരിച്ച് മുകളിൽ വലതുവശത്തെ ശൂന്യമായ സ്ഥലത്തേക്ക് മാറ്റി (X: 380, Y: 150, Radius: 60)
+                // പോസ്റ്റർ ഡിസൈൻ അനുസരിച്ച് ഫോട്ടോയുടെ കൃത്യമായ സ്ഥാനം (മുകളിൽ വലത്ത്)
                 ctx.arc(380, 150, 60, 0, Math.PI * 2); 
                 ctx.clip();
                 ctx.drawImage(userImg, 320, 90, 120, 120);
                 ctx.restore();
 
-                // ഫോട്ടോയ്ക്ക് ഒരു ഗോൾഡൻ റിങ് ബോർഡർ
+                // ഫോട്ടോയ്ക്ക് ചുറ്റും ഗോൾഡൻ ബോർഡർ റിങ്
                 ctx.strokeStyle = '#c5a03b';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
                 ctx.arc(380, 150, 61, 0, Math.PI * 2);
                 ctx.stroke();
 
-                // 3. പേരും സ്ഥലവും എഴുതുന്നു (താഴെ ശൂന്യമായ വെള്ള ഭാഗത്ത്)
+                // 3. പേരും സ്ഥലവും താഴത്തെ വെള്ള ഭാഗത്ത് പ്രിന്റ് ചെയ്യുന്നു
                 ctx.textAlign = 'center';
                 
-                // പേര് (കട്ട റെഡ് കളറിൽ വലിയ ഫോണ്ടിൽ)
+                // പേര് (കട്ട റെഡ് കളർ)
                 ctx.fillStyle = '#991b1b'; 
                 ctx.font = 'bold 26px sans-serif';
                 ctx.fillText(name, 256, 490); 
                 
-                // സ്ഥലം (ഗ്രീൻ കളറിൽ)
+                // സ്ഥലം (ഗ്രീൻ കളർ)
                 ctx.fillStyle = '#166534'; 
                 ctx.font = '600 18px sans-serif';
                 ctx.fillText(place, 256, 525);
 
-                // ചെറിയൊരു സ്വാഗത വാചകം കൂടി താഴെ
+                // സന്ദേശം
                 ctx.fillStyle = '#451a03';
                 ctx.font = 'bold 15px sans-serif';
                 ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
@@ -188,16 +186,10 @@
                 document.getElementById('downloadBtn').style.display = 'inline-flex';
                 document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
             };
-            
-            // ഇൻ കേസ് യൂസർ ഇമേജ് ലോഡിങ്ങിൽ എന്തെങ്കിലും ഇഷ്യൂ ഉണ്ടായാൽ
-            userImg.onerror = function() {
-                alert("ഫോട്ടോ ലോഡ് ചെയ്യാൻ പറ്റിയില്ല ബ്രോ, വേറെ ഫോട്ടോ ട്രൈ ചെയ്യൂ.");
-            };
         };
 
-        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ഫയൽ കാണാനില്ലെങ്കിൽ
         bgImg.onerror = function() {
-            alert("ഫയൽ ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല! 'bg.jpg' എന്ന പേരിൽ തന്നെയാണോ ഇമേജ് സേവ് ചെയ്തത് എന്ന് ഉറപ്പ് വരുത്തുക ബ്രോ.");
+            alert("ഓൺലൈൻ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡ് ചെയ്യാൻ പറ്റിയില്ല ബ്രോ. ഇന്റർനെറ്റ് കണക്ഷൻ ചെക്ക് ചെയ്യൂ.");
         };
     }
 
