@@ -21,7 +21,7 @@
         
         /* Centenary Header Elements */
         .header-zone { margin-bottom: 25px; position: relative; }
-        .centenary-logo { width: 85px; height: auto; margin-bottom: 10px; }
+        .centenary-logo { width: 100px; height: auto; margin-bottom: 10px; border-radius: 5px; }
         h1 { font-size: 1.8rem; font-weight: 900; color: #a12328; margin-bottom: 5px; letter-spacing: 0.5px; }
         p.subtitle { font-size: 1.1rem; font-weight: 700; color: var(--samastha-green); margin-bottom: 15px; }
         
@@ -61,12 +61,8 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header-zone">
-            <!-- സമസ്ത ലോഗോ പ്ലേസ്ഹോൾഡർ -->
-            <svg class="centenary-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 10 L80 35 L80 75 L50 95 L20 75 L20 35 Z" fill="#e8dec9" stroke="#c5a03b" stroke-width="4"/>
-                <circle cx="50" cy="52" r="22" fill="#198754"/>
-                <text x="50" y="58" fill="white" font-family="sans-serif" font-weight="bold" font-size="16" text-anchor="middle">100</text>
-            </svg>
+            <!-- ഒറിജിനൽ ലോഗോ ഇമേജ് ഇവിടെ കാണിക്കും -->
+            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.style.display='none'">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
@@ -111,6 +107,8 @@
 
 <script>
     let uploadedImageBase64 = null;
+    const logoImg = new Image();
+    logoImg.src = 'logo.png'; // ഒറിജിനൽ ലോഗോ ഫയൽ പാത്ത്
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -154,31 +152,29 @@
         ctx.lineWidth = 2;
         ctx.strokeRect(32, 32, canvas.width - 64, canvas.height - 64);
 
-        // 3. വാട്ടർമാർക്ക് ലോഗോ ബാക്ക്ഗ്രൗണ്ട്
-        ctx.save();
-        ctx.globalAlpha = 0.04;
-        ctx.fillStyle = '#198754';
-        ctx.beginPath();
-        ctx.arc(400, 500, 250, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
+        // 3. കാർഡിന്റെ മുകളിൽ ഒറിജിനൽ ലോഗോ കൃത്യമായി വരയ്ക്കുന്നു
+        try {
+            ctx.drawImage(logoImg, 350, 50, 100, 100);
+        } catch(e) {
+            console.log("Logo image loading issue");
+        }
 
-        // 4. മുകളിലെ തലക്കെട്ടുകൾ
+        // 4. മുകളിലെ തലക്കെട്ടുകൾ (ലോഗോയ്ക്ക് താഴെയായി അഡ്ജസ്റ്റ് ചെയ്തത്)
         ctx.fillStyle = '#831a1e'; 
         ctx.font = '900 32px sans-serif';
         ctx.textAlign = 'center';
-        ctx.fillText("جمعية العلماء بعമوم كيرلا", 400, 90);
+        ctx.fillText("جمعية العلماء بعമوم كيرلا", 400, 190);
 
         ctx.fillStyle = '#2c2519';
-        ctx.font = 'bold 24px sans-serif';
-        ctx.fillText("SAMASTHA KERALA JAM'IYYATHUL ULAMA", 400, 130);
+        ctx.font = 'bold 22px sans-serif';
+        ctx.fillText("SAMASTHA KERALA JAM'IYYATHUL ULAMA", 400, 230);
 
         // 5. സെന്റിനറി ബാനർ
         ctx.fillStyle = '#198754'; 
-        ctx.fillRect(250, 160, 300, 60);
+        ctx.fillRect(230, 260, 340, 55);
         ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 26px sans-serif';
-        ctx.fillText("സെന്റിനറി കോൺഫറൻസ്", 400, 200);
+        ctx.font = 'bold 24px sans-serif';
+        ctx.fillText("100-ാം പ്രകാശ വർഷങ്ങൾ", 400, 295);
 
         // 6. ഫോട്ടോ ഫ്രെയിം ലോഡിങ്
         const userImg = new Image();
@@ -186,47 +182,47 @@
         userImg.onload = function() {
             ctx.save();
             ctx.beginPath();
-            ctx.arc(400, 410, 130, 0, Math.PI * 2); 
+            ctx.arc(400, 470, 120, 0, Math.PI * 2); 
             ctx.clip();
-            ctx.drawImage(userImg, 270, 280, 260, 260);
+            ctx.drawImage(userImg, 280, 350, 240, 240);
             ctx.restore();
 
             // ഗോൾഡൻ റിങ് ഫോർ ഫോട്ടോ
             ctx.strokeStyle = '#c5a03b';
-            ctx.lineWidth = 6;
+            ctx.lineWidth = 5;
             ctx.beginPath();
-            ctx.arc(400, 410, 132, 0, Math.PI * 2);
+            ctx.arc(400, 470, 122, 0, Math.PI * 2);
             ctx.stroke();
 
             // 7. ടെക്സ്റ്റ് പ്രിന്റിങ്
             ctx.fillStyle = '#2c2519';
             ctx.font = '800 36px sans-serif';
-            ctx.fillText(name, 400, 600); 
+            ctx.fillText(name, 400, 650); 
 
             ctx.fillStyle = '#c5a03b';
             ctx.font = '700 24px sans-serif';
-            ctx.fillText("(" + place + ")", 400, 640); 
+            ctx.fillText("(" + place + ")", 400, 690); 
 
             ctx.fillStyle = '#443a29';
-            ctx.font = 'bold 25px sans-serif';
-            ctx.fillText("സെന്റിനറി ചരിത്ര സദസ്സിലേക്ക്", 400, 710);
-            ctx.font = '900 38px sans-serif';
+            ctx.font = 'bold 24px sans-serif';
+            ctx.fillText("സെന്റിനറി ചരിത്ര സദസ്സിലേക്ക്", 400, 750);
+            ctx.font = '900 36px sans-serif';
             ctx.fillStyle = '#198754';
-            ctx.fillText("നിങ്ങളെ ആദരവോടെ ക്ഷണിക്കുന്നു!", 400, 760);
+            ctx.fillText("നിങ്ങളെ ആദരവോടെ ക്ഷണിക്കുന്നു!", 400, 800);
 
             // 8. തീയതിയും വേദിയും ബോക്സ്
             ctx.fillStyle = '#faf6ed';
-            ctx.fillRect(80, 810, 640, 110);
+            ctx.fillRect(80, 840, 640, 110);
             ctx.strokeStyle = '#e2d4b7';
             ctx.lineWidth = 2;
-            ctx.strokeRect(80, 810, 640, 110);
+            ctx.strokeRect(80, 840, 640, 110);
 
             ctx.fillStyle = '#831a1e';
             ctx.font = 'bold 23px sans-serif';
-            ctx.fillText("2027 ജനുവരി 28, 29, 30, 31", 400, 855);
+            ctx.fillText("2027 ജനുവരി 28, 29, 30, 31", 400, 885);
             ctx.fillStyle = '#2c2519';
             ctx.font = '800 25px sans-serif';
-            ctx.fillText("വേദി: വാദി ഹറമൈൻ - മലപ്പുറം", 400, 900);
+            ctx.fillText("വേദി: വാദി ഹറമൈൻ - മലപ്പുറം", 400, 930);
 
             // ഡൗൺലോഡ് ബട്ടൺ ആക്റ്റീവ് ആക്കുന്നു
             document.getElementById('downloadBtn').style.display = 'inline-flex';
