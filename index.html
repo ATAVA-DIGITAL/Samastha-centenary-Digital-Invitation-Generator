@@ -62,7 +62,7 @@
         <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
-            <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
+            <input type="text" id="userName" placeholder="e.g. ABDULLA K P">
         </div>
 
         <div class="form-group">
@@ -85,9 +85,9 @@
         <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
-            <h3>niങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- നിന്റെ പോസ്റ്ററിന്റെ യഥാർത്ഥ ആസ്പെക്ട് റേഷ്യോ അനുസരിച്ച് 600x850 ആക്കി -->
-            <canvas id="inviteCanvas" width="600" height="850"></canvas>
+            <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
+            <!-- പോസ്റ്ററിന്റെ കറക്റ്റ് 3:4 റേഷ്യോ ആയ 600x800 സൈസ് കൊടുത്തു -->
+            <canvas id="inviteCanvas" width="600" height="800"></canvas>
         </div>
 
         <!-- BRANDING FOOTER -->
@@ -100,8 +100,8 @@
 <script>
     let uploadedImageBase64 = null;
 
-    document.getElementById('topLogo').src = 'logo.png.jpg';
-    document.getElementById('topLogo').onerror = function() { this.src = 'logo.png'; };
+    document.getElementById('topLogo').src = 'logo.png';
+    document.getElementById('topLogo').onerror = function() { this.src = 'logo.png.jpg'; };
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -140,39 +140,36 @@
             // 1. ഫുൾ ബാക്ക്ഗ്രൗണ്ട് പോസ്റ്റർ വരയ്ക്കുന്നു
             ctx.drawImage(renderBg, 0, 0, canvas.width, canvas.height);
 
-            // 2. അപ്‌ലോഡ് ചെയ്ത ഫോട്ടോ വരയ്ക്കുന്നു
+            // 2. അപ്‌ലോഡ് ചെയ്ത ഫോട്ടോ മുകളിൽ ഇടതുവശത്തെ ഒഴിഞ്ഞ ഭാഗത്ത് റൗണ്ടിൽ സെറ്റ് ചെയ്യുന്നു
             const userImg = new Image();
             userImg.onload = function() {
                 ctx.save();
                 ctx.beginPath();
-                
-                // നിന്റെ പോസ്റ്ററിൽ വലതുവശത്ത് താഴെയുള്ള റൗണ്ട് ബോക്സിന് കറക്റ്റ് അളവ് മാറ്റി (X: 470, Y: 710, Radius: 45)
-                ctx.arc(470, 715, 45, 0, Math.PI * 2); 
+                // മുകൾ ഭാഗത്തെ വൈറ്റ് സ്പേസിൽ കൃത്യമായി വരാൻ (X: 160, Y: 220, Radius: 55)
+                ctx.arc(160, 220, 55, 0, Math.PI * 2); 
                 ctx.clip();
-                
-                // ഇമേജ് വട്ടത്തിനുള്ളിൽ കറക്റ്റ് ആയി ഫിറ്റ് ചെയ്യുന്നു
-                ctx.drawImage(userImg, 425, 670, 90, 90);
+                ctx.drawImage(userImg, 105, 165, 110, 110);
                 ctx.restore();
 
-                // ഫോട്ടോയ്ക്ക് മുകളിൽ ഒരു നേരിയ വൈറ്റ് ബോർഡർ ഫ്രെയിം
-                ctx.strokeStyle = '#ffffff';
+                // ഫോട്ടോയ്ക്ക് ചുറ്റും ഭംഗിയുള്ള ഒരു ഗോൾഡൻ ബോർഡർ ഫ്രെയിം
+                ctx.strokeStyle = '#c5a03b';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(470, 715, 46, 0, Math.PI * 2);
+                ctx.arc(160, 220, 56, 0, Math.PI * 2);
                 ctx.stroke();
 
-                // 3. പേരും സ്ഥലവും പോസ്റ്ററിൽ എഴുതുന്നു
+                // 3. പേരും സ്ഥലവും താഴെ വലതുവശത്തെ ലോഗോയുടെ മുകളിലായി അലൈൻ ചെയ്യുന്നു
                 ctx.textAlign = 'center';
                 
-                // പേര് എഴുതാൻ (പോസ്റ്ററിലെ റെഡ് കളറിനോട് മാച്ച് ആയ കളർ) - പൊസിഷൻ പോസ്റ്ററിന്റെ മധ്യഭാഗത്തേക്ക് മാറ്റി
-                ctx.fillStyle = '#b91c1c'; 
-                ctx.font = 'bold 30px sans-serif';
-                ctx.fillText(name, 220, 710); 
+                // പേര് (പോസ്റ്ററിലെ തിളങ്ങുന്ന ചുവപ്പ് നിറത്തോട് മാച്ച് ആകുന്ന ഷേഡ്)
+                ctx.fillStyle = '#be123c'; 
+                ctx.font = 'bold 26px sans-serif';
+                ctx.fillText(name, 485, 660); 
                 
-                // സ്ഥലം എഴുതാൻ (ഡാർക്ക് ഗ്രീൻ കളർ)
+                // സ്ഥലം (ഡാർക്ക് ഗ്രീൻ കളർ)
                 ctx.fillStyle = '#15803d'; 
-                ctx.font = '600 22px sans-serif';
-                ctx.fillText(place, 220, 750);
+                ctx.font = '600 18px sans-serif';
+                ctx.fillText(place, 485, 695);
 
                 // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
                 document.getElementById('downloadBtn').style.display = 'inline-flex';
@@ -181,17 +178,17 @@
             userImg.src = uploadedImageBase64;
         };
 
+        // ഫയൽ നെയിമുകൾ മാറിപ്പോയാലും ലോഡ് ചെയ്യാനുള്ള ഡബിൾ ബാക്കപ്പ് ചെക്കിങ്
         renderBg.onerror = function() {
-            // ജിറ്റ്‌ഹബിൽ bg.jpg ആണെങ്കിൽ അത് ലോഡ് ചെയ്യാനുള്ള ബാക്കപ്പ്
             const backupBg = new Image();
             backupBg.onload = function() {
                 ctx.drawImage(backupBg, 0, 0, canvas.width, canvas.height);
                 renderBg.onload();
             };
-            backupBg.src = 'bg.jpg';
+            backupBg.src = 'bg.jpg.jpg';
         };
 
-        renderBg.src = 'bg.jpg.jpg';
+        renderBg.src = 'bg.jpg';
     }
 
     function downloadImage() {
