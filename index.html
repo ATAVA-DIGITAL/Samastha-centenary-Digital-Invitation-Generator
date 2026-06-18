@@ -20,7 +20,7 @@
         .container { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 3px solid var(--primary-gold); text-align: center; }
         
         .header-zone { margin-bottom: 25px; position: relative; }
-        .centenary-logo { width: 90px; height: auto; margin-bottom: 10px; }
+        .centenary-logo { width: 100px; height: auto; margin-bottom: 10px; }
         h1 { font-size: 1.6rem; font-weight: 900; color: #a12328; margin-bottom: 5px; }
         p.subtitle { font-size: 1rem; font-weight: 700; color: var(--samastha-green); margin-bottom: 15px; }
         .divider { height: 2px; background: linear-gradient(to right, transparent, var(--primary-gold), transparent); margin-bottom: 20px; }
@@ -53,8 +53,8 @@
     <div class="container">
         <!-- HEADER -->
         <div class="header-zone">
-            <!-- ലോഗോ നേരിട്ട് കോഡിൽ സെറ്റ് ചെയ്തു -->
-            <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
+            <!-- നിന്റെ കറക്റ്റ് ലോഗോ ഫയൽ നെയിം 'logo.png.jpg' വെച്ച് ലോഡ് ചെയ്യുന്നു -->
+            <img src="logo.png.jpg" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.src='logo.png'">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
@@ -87,8 +87,7 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- ഒറിജിനൽ പോസ്റ്ററിന്റെ വീതിയും നീളവും (450x570) കൃത്യമായി സെറ്റ് ചെയ്തു -->
-            <canvas id="inviteCanvas" width="450" height="570"></canvas>
+            <canvas id="inviteCanvas" width="512" height="640"></canvas>
         </div>
 
         <!-- BRANDING FOOTER -->
@@ -100,11 +99,6 @@
 
 <script>
     let uploadedImageBase64 = null;
-
-    // ഹെഡറിലെ ലോഗോ ഇമേജ് കാണിക്കാൻ വേണ്ടി ഒറിജിനൽ ഫയൽ നെയിം സെറ്റ് ചെയ്യുന്നു
-    document.getElementById('topLogo').src = 'logo.png.jpg';
-    // ഇൻഫെക്റ്റ് അത് കിട്ടിയില്ലെങ്കിൽ പഴയ ലോഗോ നെയിമിലേക്ക് മാറും
-    document.getElementById('topLogo').onerror = function() { this.src = 'logo.png'; };
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -136,103 +130,59 @@
         }
 
         document.getElementById('previewArea').style.display = 'block';
+
+        // കാൻവാസ് ക്ലിയർ ചെയ്യുക
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // നിന്റെ ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡ് ആകുന്നു
+        // നിന്റെ ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് നെയിം ആയ 'bg.jpg.jpg' വെച്ച് ലോഡ് ചെയ്യുന്നു
         const renderBg = new Image();
         renderBg.onload = function() {
-            // 1. പ്രധാന ബാക്ക്ഗ്രൗണ്ട് പോസ്റ്റർ വരയ്ക്കുന്നു
+            // 1. ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
             ctx.drawImage(renderBg, 0, 0, canvas.width, canvas.height);
 
-            // 2. അപ്‌ലോഡ് ചെയ്ത ആളുടെ ഫോട്ടോ വരയ്ക്കുന്നു (ലോഗോയ്ക്ക് മുകളിലുള്ള വട്ടത്തിൽ വരാൻ)
+            // 2. യൂസറുടെ ഫോട്ടോ പ്രൊസസ്സ് ചെയ്യുന്നു
             const userImg = new Image();
             userImg.onload = function() {
                 ctx.save();
                 ctx.beginPath();
-                // പോസ്റ്ററിലെ വട്ടത്തിന് അനുസരിച്ച് (X: 345, Y: 290, Radius: 45) മാറ്റി സെറ്റ് ചെയ്തു
-                ctx.arc(345, 290, 45, 0, Math.PI * 2); 
+                // ഫോട്ടോ മുകളിൽ വലത് വശത്തായി റൗണ്ടിൽ വരാൻ
+                ctx.arc(380, 150, 60, 0, Math.PI * 2); 
                 ctx.clip();
-                ctx.drawImage(userImg, 300, 245, 90, 90);
+                ctx.drawImage(userImg, 320, 90, 120, 120);
                 ctx.restore();
 
-                // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു ഗോൾഡൻ ബോർഡർ ഫ്രെയിം
+                // ബോർഡർ ഫ്രെയിം
                 ctx.strokeStyle = '#c5a03b';
-                ctx.lineWidth = 2;
+                ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(345, 290, 46, 0, Math.PI * 2);
+                ctx.arc(380, 150, 61, 0, Math.PI * 2);
                 ctx.stroke();
 
-                // 3. പേരും സ്ഥലവും പോസ്റ്ററിന്റെ താഴത്തെ വൈറ്റ് സ്പേസിൽ കൃത്യമായി പ്രിന്റ് ചെയ്യുന്നു
+                // 3. പേരും വിവരങ്ങളും ബാക്ക്ഗ്രൗണ്ടിലേക്ക് പ്രിന്റ് ചെയ്യുന്നു
                 ctx.textAlign = 'center';
                 
-                // പേര് എഴുതാൻ (ഡാർക്ക് റെഡ് കളർ)
+                // പേര് (കട്ടി ചുവപ്പ്)
                 ctx.fillStyle = '#991b1b'; 
-                ctx.font = 'bold 22px sans-serif';
-                ctx.fillText(name, 225, 485); 
+                ctx.font = 'bold 26px sans-serif';
+                ctx.fillText(name, 256, 490); 
                 
-                // സ്ഥലം എഴുതാൻ (ഡാർക്ക് ഗ്രീൻ കളർ)
+                // സ്ഥലം (പച്ച)
                 ctx.fillStyle = '#166534'; 
-                ctx.font = '600 16px sans-serif';
-                ctx.fillText(place, 225, 515);
+                ctx.font = '600 18px sans-serif';
+                ctx.fillText(place, 256, 525);
 
-                // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
+                // ഇൻവിറ്റേഷൻ മെസ്സേജ്
+                ctx.fillStyle = '#451a03';
+                ctx.font = 'bold 15px sans-serif';
+                ctx.fillText("ചриത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
+
                 document.getElementById('downloadBtn').style.display = 'inline-flex';
                 document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
             };
             userImg.src = uploadedImageBase64;
         };
 
-        // നിന്റെ ജിറ്റ്‌ഹബിലുള്ള രണ്ട് ടൈപ്പ് ബാക്ക്ഗ്രൗണ്ട് ഫയൽ നെയിമുകളും ബാക്കപ്പായി ലോഡ് ചെയ്യിക്കുന്നു
-        renderBg.onerror = function() {
-            const backupBg = new Image();
-            backupBg.onload = function() {
-                ctx.drawImage(backupBg, 0, 0, canvas.width, canvas.height);
-                // ബാക്കപ്പ് ലോഡ് ആയാലും ഫോട്ടോയും ടെക്സ്റ്റും വരാൻ വേണ്ടി വീണ്ടും കോൾ ചെയ്യുന്നു
-                renderBg.onload();
-            };
-            backupBg.onerror = function() {
-                // രണ്ടു ഫയലും കിട്ടിയില്ലെങ്കിൽ മാത്രം ഒരു ഡിസൈൻ ഫ്രെയിം ജനറേറ്റ് ചെയ്യും
-                ctx.fillStyle = "#fffcf7";
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.strokeStyle = "#c5a03b";
-                ctx.lineWidth = 6;
-                ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
-                
-                ctx.fillStyle = '#a12328';
-                ctx.font = 'bold 24px sans-serif';
-                ctx.textAlign = 'center';
-                ctx.fillText("SAMASTHA CENTENARY", 225, 80);
-                ctx.fillStyle = '#198754';
-                ctx.font = 'bold 16px sans-serif';
-                ctx.fillText("100-ാം വാർഷിക സന്ദേശ കവാടം", 225, 110);
-                
-                // ഫോട്ടോ സെറ്റ് ചെയ്യുന്നു
-                const userImg = new Image();
-                userImg.onload = function() {
-                    ctx.save();
-                    ctx.beginPath();
-                    ctx.arc(225, 230, 60, 0, Math.PI * 2);
-                    ctx.clip();
-                    ctx.drawImage(userImg, 165, 170, 120, 120);
-                    ctx.restore();
-                    
-                    ctx.textAlign = 'center';
-                    ctx.fillStyle = '#991b1b';
-                    ctx.font = 'bold 24px sans-serif';
-                    ctx.fillText(name, 225, 380);
-                    
-                    ctx.fillStyle = '#166534';
-                    ctx.font = '600 18px sans-serif';
-                    ctx.fillText(place, 225, 415);
-                    
-                    document.getElementById('downloadBtn').style.display = 'inline-flex';
-                };
-                userImg.src = uploadedImageBase64;
-            };
-            backupBg.src = 'bg.jpg';
-        };
-
-        // പ്രൈമറി ആയി 'bg.jpg.jpg' ലോഡ് ചെയ്യാൻ കൊടുക്കുന്നു
+        // ലോഡിങ് കൺഫ്യൂഷനുകൾ ഒഴിവാക്കാൻ ലോക്കൽ ഇമേജ് നെയിം കറക്റ്റ് ആയി സെറ്റ് ചെയ്തു
         renderBg.src = 'bg.jpg.jpg';
     }
 
