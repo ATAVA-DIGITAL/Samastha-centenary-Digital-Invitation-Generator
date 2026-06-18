@@ -51,16 +51,13 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <div class="header-zone">
-            <!-- ഒഫീഷ്യൽ ലോഗോ ഫയൽ നെയിം -->
             <img src="logo.png.jpg" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.src='logo.png'">
             <h1>SAMASTHA CENTENARY</h1>
-            <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
+            <p class="subtitle">100-ാം വാർഷിക സന്ദേശം </p>
             <div class="divider"></div>
         </div>
 
-        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -71,7 +68,6 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
-        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -79,18 +75,15 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
-        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
-        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
             <canvas id="inviteCanvas" width="512" height="640"></canvas>
         </div>
 
-        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -132,69 +125,89 @@
         document.getElementById('previewArea').style.display = 'block';
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // സുരക്ഷിതമായി ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡ് ചെയ്യാനുള്ള ഫങ്ഷൻ
         const renderBg = new Image();
-        
-        // ലോഡിങ് കൺഫ്യൂഷൻ ഒഴിവാക്കാൻ ഫങ്ഷൻ ഉള്ളിലേക്ക് മാറ്റി
         renderBg.onload = function() {
-            drawEverything(renderBg);
-        };
-
-        // ഇമേജ് ലോഡ് ചെയ്യുന്നതിൽ എന്തെങ്കിലും തടസ്സം ഉണ്ടായാൽ സിസ്റ്റം ഹാങ്ങ് ആകാതിരിക്കാൻ ബാക്കപ്പ് വഴി
-        renderBg.onerror = function() {
-            console.log("bg.jpg.jpg എറർ ഫൗണ്ട്. ബാക്കപ്പ് ഫയൽ ട്രൈ ചെയ്യുന്നു...");
-            const backupBg = new Image();
-            backupBg.onload = function() {
-                drawEverything(backupBg);
-            };
-            backupBg.onerror = function() {
-                alert("ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് (`bg.jpg.jpg` അല്ലെങ്കിൽ `bg.jpg`) റീഡ് ചെയ്യാൻ പറ്റുന്നില്ല ബ്രോ. ഫയൽ റീപ്പോസിറ്ററിയിൽ ഉണ്ടെന്ന് ഉറപ്പാക്കൂ!");
-            };
-            backupBg.src = 'bg.jpg'; 
-        };
-
-        renderBg.src = 'bg.jpg.jpg';
-
-        // ഫൈനൽ ഡ്രോയിങ് ഫങ്ഷൻ
-        function drawEverything(bgImageObject) {
             // 1. ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
-            ctx.drawImage(bgImageObject, 0, 0, canvas.width, canvas.height);
+            ctx.drawImage(renderBg, 0, 0, canvas.width, canvas.height);
 
             // 2. യൂസറുടെ ഫോട്ടോ പ്രൊസസ്സ് ചെയ്യുന്നു
             const userImg = new Image();
             userImg.onload = function() {
                 ctx.save();
                 ctx.beginPath();
-                ctx.arc(380, 150, 60, 0, Math.PI * 2); 
+                // ഫോട്ടോ മുകളിൽ വലതുവശത്ത് കൃത്യമായി വരാൻ
+                ctx.arc(410, 150, 55, 0, Math.PI * 2); 
                 ctx.clip();
-                ctx.drawImage(userImg, 320, 90, 120, 120);
+                ctx.drawImage(userImg, 355, 95, 110, 110);
                 ctx.restore();
 
+                // ഫോട്ടോ ഫ്രെയിം ബോർഡർ
                 ctx.strokeStyle = '#c5a03b';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
-                ctx.arc(380, 150, 61, 0, Math.PI * 2);
+                ctx.arc(410, 150, 56, 0, Math.PI * 2);
                 ctx.stroke();
 
                 // 3. ടെക്സ്റ്റുകൾ പ്രിന്റ് ചെയ്യുന്നു
                 ctx.textAlign = 'center';
                 
+                // പേര് (ചുവപ്പ് നിറത്തിൽ)
                 ctx.fillStyle = '#991b1b'; 
-                ctx.font = 'bold 26px sans-serif';
-                ctx.fillText(name, 256, 490); 
+                ctx.font = 'bold 24px sans-serif';
+                ctx.fillText(name, 256, 480); 
                 
+                // സ്ഥലം (പച്ച നിറത്തിൽ)
                 ctx.fillStyle = '#166534'; 
                 ctx.font = '600 18px sans-serif';
-                ctx.fillText(place, 256, 525);
+                ctx.fillText(place, 256, 515);
 
+                // ഇൻവിറ്റേഷൻ വാചകം
                 ctx.fillStyle = '#451a03';
-                ctx.font = 'bold 15px sans-serif';
-                ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 555);
+                ctx.font = 'bold 14px sans-serif';
+                ctx.fillText("ചരിത്ര സദസ്സിലേക്ക് നിങ്ങളെ സ്നേഹപൂർവ്വം ക്ഷണിക്കുന്നു", 256, 550);
 
                 document.getElementById('downloadBtn').style.display = 'inline-flex';
                 document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
             };
             userImg.src = uploadedImageBase64;
-        }
+        };
+
+        // ബാക്ക്ഗ്രൗണ്ട് ലോഡ് ചെയ്യാൻ ലോക്കൽ ഫയൽ ട്രൈ ചെയ്യുന്നു
+        renderBg.onerror = function() {
+            // ലോക്കൽ ഫയൽ ലോഡ് ആയില്ലെങ്കിൽ സിസ്റ്റം തനിയെ ജനറേറ്റ് ചെയ്യുന്ന ഒരു ബാക്കപ്പ് ബാക്ക്ഗ്രൗണ്ട് സെറ്റ് ചെയ്യും
+            ctx.fillStyle = "#fcf8f2";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = "#c5a03b";
+            ctx.strokeRect(5, 5, canvas.width-10, canvas.height-10);
+            
+            // ബാക്കപ്പിലും ഫോട്ടോയും ടെക്സ്റ്റും വർക്ക് ചെയ്യിപ്പിക്കുന്നു
+            const userImg = new Image();
+            userImg.onload = function() {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(256, 200, 70, 0, Math.PI * 2);
+                ctx.clip();
+                ctx.drawImage(userImg, 186, 130, 140, 140);
+                ctx.restore();
+                
+                ctx.textAlign = 'center';
+                ctx.fillStyle = '#991b1b'; 
+                ctx.font = 'bold 26px sans-serif';
+                ctx.fillText(name, 256, 400); 
+                
+                ctx.fillStyle = '#166534'; 
+                ctx.font = '600 20px sans-serif';
+                ctx.fillText(place, 256, 440);
+
+                document.getElementById('downloadBtn').style.display = 'inline-flex';
+            };
+            userImg.src = uploadedImageBase64;
+        };
+
+        // ലോക്കൽ ഫയൽ പാത്ത് കൊടുത്തു
+        renderBg.src = 'bg.jpg.jpg';
     }
 
     function downloadImage() {
