@@ -81,7 +81,7 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <canvas id="inviteCanvas" width="600" height="800"></canvas>
+            <canvas id="inviteCanvas" width="800" height="1000"></canvas>
         </div>
 
         <div class="footer-tag">
@@ -111,58 +111,44 @@
     }
 
     function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
-        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
+        // 1. നീ തന്ന ഒറിജിനൽ വൈറ്റ് സ്പേസ് ഉള്ള പോസ്റ്റർ വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // --- പ്രൊഫഷണൽ ഫോട്ടോ & ടെക്സ്റ്റ് എഡിറ്റിംഗ് ലെയർ (താഴെ ഇടതുവശത്തെ സ്പേസ്) ---
-        
-        // ഫോട്ടോ വട്ടത്തിൽ വെക്കാൻ ആവശ്യമായ അളവുകൾ (X: 100, Y: 710, Radius: 45)
-        const photoX = 100;
-        const photoY = 710;
-        const radius = 45;
+        // --- താഴെ വലതുവശത്തെ വൈറ്റ് ബോക്സിനുള്ളിലെ പ്രൊഫഷണൽ അലൈൻമെന്റ് ---
+        // വൈറ്റ് ബോക്സിന്റെ സെന്റർ കോർഡിനേറ്റ് X = 632 ആണ്.
+        const targetCenterX = 632;
+        const photoCenterY = 805; // ഫോട്ടോ വരയ്ക്കേണ്ട സെന്റർ Y
+        const radius = 65;        // ഫോട്ടോയുടെ വലിപ്പം അല്പം കൂട്ടി (ക്ലിയരിറ്റിക്ക് വേണ്ടി)
 
-        // ഫോട്ടോയുടെ താഴെ ഒരു ചെറിയ പ്രൊഫഷണൽ ഷാഡോ ഇഫക്റ്റ്
-        ctx.save();
-        ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 4;
-        ctx.fillStyle = "#ffffff";
-        ctx.beginPath();
-        ctx.arc(photoX, photoY, radius, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.restore();
-
-        // യൂസറുടെ ഫോട്ടോ ക്ലിപ്പ് ചെയ്ത് കറക്റ്റ് ലെയറിൽ വെക്കുന്നു
+        // 2. യൂസറുടെ ഫോട്ടോ ആ ബോക്സിന് മുകളിലായി കൃത്യം റൗണ്ടിൽ ക്ലിപ്പ് ചെയ്യുന്നു
         ctx.save();
         ctx.beginPath();
-        ctx.arc(photoX, photoY, radius, 0, Math.PI * 2); 
+        ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2); 
         ctx.clip();
-        // ഫോട്ടോ സ്ക്വയർ ആയാലും റൗണ്ടിൽ കൃത്യമായി ഫിറ്റ് ചെയ്യാനുള്ള സൈസ് അഡ്ജസ്റ്റ്മെന്റ്
-        ctx.drawImage(userImg, photoX - radius, photoY - radius, radius * 2, radius * 2);
+        ctx.drawImage(userImg, targetCenterX - radius, photoCenterY - radius, radius * 2, radius * 2);
         ctx.restore();
 
-        // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു റോയൽ ഗോൾഡൻ ഫ്രെയിം ബോർഡർ
+        // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു പ്രൊഫഷണൽ തിൻ ഗോൾഡൻ ബോർഡർ ഫ്രെയിം
         ctx.strokeStyle = '#c5a03b';
         ctx.lineWidth = 3;
         ctx.beginPath();
-        ctx.arc(photoX, photoY, radius + 1, 0, Math.PI * 2);
+        ctx.arc(targetCenterX, photoCenterY, radius + 1, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 3. പേരും സ്ഥലവും ഫോട്ടോയുടെ തൊട്ടടുത്ത് (വലതുവശത്ത്) വൃത്തിയായി എഴുതുന്നു
-        ctx.textAlign = 'left';
+        // 3. പേരും സ്ഥലവും ഫോട്ടോയ്ക്ക് താഴെ സെന്റർ അലൈൻഡ് ആയി എഴുതുന്നു
+        ctx.textAlign = 'center';
         
-        // പേര് ഡിസൈൻ (Samastha Dark Red - Bold & Clean)
+        // പേര് ഡിസൈൻ (Samastha Dark Red - നല്ല ബോൾഡ് ആയിട്ട്)
         ctx.fillStyle = '#a12328'; 
         ctx.font = 'bold 26px sans-serif';
-        ctx.fillText(name, photoX + radius + 20, photoY - 5); 
+        ctx.fillText(name, targetCenterX, photoCenterY + radius + 35); 
         
-        // സ്ഥലം ഡിസൈൻ (Samastha Green)
+        // സ്ഥലം ഡിസൈൻ (Samastha Green - ക്ലീൻ ലുക്ക്)
         ctx.fillStyle = '#198754'; 
-        ctx.font = '600 19px sans-serif';
-        ctx.fillText(place, photoX + radius + 20, photoY + 25);
+        ctx.font = '600 20px sans-serif';
+        ctx.fillText(place, targetCenterX, photoCenterY + radius + 68);
 
-        // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
+        // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
         document.getElementById('downloadBtn').style.display = 'inline-flex';
         document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
     }
@@ -174,11 +160,11 @@
         const ctx = canvas.getContext('2d');
 
         if(!name || !place) {
-            alert("ദയവായി പേരും സ്ഥലവും കൃത്യമായി ടൈപ്പ് ചെയ്യൂ ബ്രോ!");
+            alert("ദയവായി പേരും സ്ഥലവും ടൈപ്പ് ചെയ്യൂ ബ്രോ!");
             return;
         }
         if(!uploadedImageBase64) {
-            alert("ക്ഷണക്കത്തിൽ വെക്കാൻ ഒരു ഫോട്ടോ അപ്‌ലോഡ് ചെയ്യൂ ബ്രോ!");
+            alert("ക്ഷണക്കത്തിൽ വെക്കാൻ ഫോട്ടോ കൂടി അപ്‌ലോഡ് ചെയ്യൂ ബ്രോ!");
             return;
         }
 
@@ -201,12 +187,12 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
-        // GitHub ഹോസ്റ്റിംഗിൽ വരുന്ന പേരിന്റെ വ്യത്യാസം പരിഹരിക്കാൻ ബാക്കപ്പ് ലോഡിങ്
+        // ഫയൽ നെയിമിൽ സ്പേസ് ഉള്ളതുകൊണ്ട് വരാൻ സാധ്യതയുള്ള എറർ ഒഴിവാക്കാൻ ബാക്കപ്പ് ലിങ്ക്
         renderBg.onerror = function() {
-            renderBg.src = 'bg.jpg.jpg'; 
+            renderBg.src = 'bg.jpg'; 
         };
 
-        renderBg.src = 'bg.jpg';
+        renderBg.src = 'back ground.jpg';
         userImg.src = uploadedImageBase64;
     }
 
