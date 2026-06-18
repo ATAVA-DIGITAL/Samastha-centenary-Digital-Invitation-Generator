@@ -62,7 +62,7 @@
         <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
-            <input type="text" id="userName" placeholder="e.g. ABDULLA K P">
+            <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
         </div>
 
         <div class="form-group">
@@ -86,7 +86,6 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- പോസ്റ്ററിന്റെ കറക്റ്റ് 3:4 റേഷ്യോ ആയ 600x800 സൈസ് കൊടുത്തു -->
             <canvas id="inviteCanvas" width="600" height="800"></canvas>
         </div>
 
@@ -117,6 +116,43 @@
         }
     }
 
+    function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
+        // 1. ബാക്ക്ഗ്രൗണ്ട് പോസ്റ്റർ വരയ്ക്കുന്നു
+        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+
+        // 2. യൂസറുടെ ഫോട്ടോ മുകളിൽ ഇടതുവശത്ത് വട്ടത്തിൽ ഡിസൈൻ ചെയ്യുന്നു
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(160, 220, 55, 0, Math.PI * 2); 
+        ctx.clip();
+        ctx.drawImage(userImg, 105, 165, 110, 110);
+        ctx.restore();
+
+        // ഫോട്ടോയ്ക്ക് ബോർഡർ
+        ctx.strokeStyle = '#c5a03b';
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.arc(160, 220, 56, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 3. പേരും സ്ഥലവും താഴെ വലതുവശത്ത് നല്ല ഭംഗിയായി അറ്റാച്ച് ചെയ്യുന്നു
+        ctx.textAlign = 'center';
+        
+        // പേര് ഡിസൈൻ (Bold Red)
+        ctx.fillStyle = '#be123c'; 
+        ctx.font = 'bold 28px sans-serif';
+        ctx.fillText(name, 485, 660); 
+        
+        // സ്ഥലം ഡിസൈൻ (Green)
+        ctx.fillStyle = '#15803d'; 
+        ctx.font = '600 20px sans-serif';
+        ctx.fillText(place, 485, 695);
+
+        // ലോഡിങ് കഴിഞ്ഞ് ബട്ടൺ കാണിക്കുന്നു
+        document.getElementById('downloadBtn').style.display = 'inline-flex';
+        document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
+    }
+
     function generateInvitation() {
         const name = document.getElementById('userName').value.trim();
         const place = document.getElementById('userPlace').value.trim();
@@ -136,59 +172,28 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const renderBg = new Image();
+        const userImg = new Image();
+        
+        let bgLoaded = false;
+        let userLoaded = false;
+
         renderBg.onload = function() {
-            // 1. ഫുൾ ബാക്ക്ഗ്രൗണ്ട് പോസ്റ്റർ വരയ്ക്കുന്നു
-            ctx.drawImage(renderBg, 0, 0, canvas.width, canvas.height);
-
-            // 2. അപ്‌ലോഡ് ചെയ്ത ഫോട്ടോ മുകളിൽ ഇടതുവശത്തെ ഒഴിഞ്ഞ ഭാഗത്ത് റൗണ്ടിൽ സെറ്റ് ചെയ്യുന്നു
-            const userImg = new Image();
-            userImg.onload = function() {
-                ctx.save();
-                ctx.beginPath();
-                // മുകൾ ഭാഗത്തെ വൈറ്റ് സ്പേസിൽ കൃത്യമായി വരാൻ (X: 160, Y: 220, Radius: 55)
-                ctx.arc(160, 220, 55, 0, Math.PI * 2); 
-                ctx.clip();
-                ctx.drawImage(userImg, 105, 165, 110, 110);
-                ctx.restore();
-
-                // ഫോട്ടോയ്ക്ക് ചുറ്റും ഭംഗിയുള്ള ഒരു ഗോൾഡൻ ബോർഡർ ഫ്രെയിം
-                ctx.strokeStyle = '#c5a03b';
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.arc(160, 220, 56, 0, Math.PI * 2);
-                ctx.stroke();
-
-                // 3. പേരും സ്ഥലവും താഴെ വലതുവശത്തെ ലോഗോയുടെ മുകളിലായി അലൈൻ ചെയ്യുന്നു
-                ctx.textAlign = 'center';
-                
-                // പേര് (പോസ്റ്ററിലെ തിളങ്ങുന്ന ചുവപ്പ് നിറത്തോട് മാച്ച് ആകുന്ന ഷേഡ്)
-                ctx.fillStyle = '#be123c'; 
-                ctx.font = 'bold 26px sans-serif';
-                ctx.fillText(name, 485, 660); 
-                
-                // സ്ഥലം (ഡാർക്ക് ഗ്രീൻ കളർ)
-                ctx.fillStyle = '#15803d'; 
-                ctx.font = '600 18px sans-serif';
-                ctx.fillText(place, 485, 695);
-
-                // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
-                document.getElementById('downloadBtn').style.display = 'inline-flex';
-                document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
-            };
-            userImg.src = uploadedImageBase64;
+            bgLoaded = true;
+            if(userLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
-        // ഫയൽ നെയിമുകൾ മാറിപ്പോയാലും ലോഡ് ചെയ്യാനുള്ള ഡബിൾ ബാക്കപ്പ് ചെക്കിങ്
+        userImg.onload = function() {
+            userLoaded = true;
+            if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
+        };
+
+        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡിങ് ഇറർ വന്നാൽ കൈകാര്യം ചെയ്യാൻ
         renderBg.onerror = function() {
-            const backupBg = new Image();
-            backupBg.onload = function() {
-                ctx.drawImage(backupBg, 0, 0, canvas.width, canvas.height);
-                renderBg.onload();
-            };
-            backupBg.src = 'bg.jpg.jpg';
+            renderBg.src = 'bg.jpg.jpg'; // ബാക്കപ്പ് ഫയൽ നെയിം ട്രൈ ചെയ്യുന്നു
         };
 
         renderBg.src = 'bg.jpg';
+        userImg.src = uploadedImageBase64;
     }
 
     function downloadImage() {
