@@ -51,15 +51,13 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <div class="header-zone">
-            <img src="logo.png" class="centenary-logo" alt="Samastha Centenary Logo">
+            <img src="https://raw.githubusercontent.com/atava-digital/atava-digital.github.io/main/logo.png" class="centenary-logo" alt="Samastha Centenary Logo" onerror="this.src='logo.png'">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
         </div>
 
-        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -70,7 +68,6 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
-        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -78,18 +75,15 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
-        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
-        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
             <canvas id="inviteCanvas" width="512" height="640"></canvas>
         </div>
 
-        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -99,9 +93,10 @@
 <script>
     let uploadedImageBase64 = null;
     
-    // പേജ് ലോഡ് ചെയ്യുമ്പോൾ തന്നെ നിന്റെ ലോക്കൽ ഫോൾഡറിലുള്ള bg.jpg മുൻകൂട്ടി ലോഡ് ചെയ്തു വെക്കുന്നു
+    // ഡയറക്ട് GitHub ലിങ്ക് വഴി ബാക്ക്ഗ്രൗണ്ട് മുൻകൂട്ടി ലോഡ് ചെയ്യുന്നു
     const bgImg = new Image();
-    bgImg.src = 'bg.jpg'; 
+    bgImg.crossOrigin = "anonymous"; // ഡൗൺലോഡ് ചെയ്യുമ്പോൾ CORS ബ്ലോക്ക് വരാതിരിക്കാൻ
+    bgImg.src = 'https://raw.githubusercontent.com/atava-digital/atava-digital.github.io/main/bg.jpg'; 
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -132,18 +127,20 @@
             return;
         }
 
-        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് പൂർണ്ണമായി ലോഡ് ആയോ എന്ന് മാത്രം ഉറപ്പുവരുത്തുക
+        // ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡിങ് ബാക്കപ്പ് ചെക്ക്
         if (!bgImg.complete || bgImg.naturalWidth === 0) {
-            alert("ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് (bg.jpg) ഇനിയും ലോഡ് ആയിട്ടില്ല ബ്രോ. ഒന്നുകൂടി പേജ് റിഫ്രഷ് ചെയ്ത് നോക്കൂ, അല്ലെങ്കിൽ ഫയൽ ഫോൾഡറിൽ ഉണ്ടെന്ന് ഉറപ്പാക്കൂ.");
+            // ഒന്നുകൂടി ഫയൽ ലോഡ് ചെയ്യാൻ ട്രൈ ചെയ്യുന്നു
+            bgImg.src = 'bg.jpg';
+            alert("ചെറിയൊരു നെറ്റ്‌വർക്ക് താമസം ഉണ്ട് ബ്രോ, ദയവായി ഒരു 2 സെക്കൻഡ് കഴിഞ്ഞ് ഒന്നുകൂടി ക്ലിക്ക് ചെയ്യൂ!");
             return;
         }
 
         document.getElementById('previewArea').style.display = 'block';
 
-        // 1. ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
+        // 1. ബാക്ക്ഗ്രൗണ്ട് ഡിസൈൻ വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // 2. യൂസറുടെ ഫോട്ടോ വരയ്ക്കുന്നു
+        // 2. യൂസറുടെ ഫോട്ടോ സെറ്റ് ചെയ്യുന്നു
         const userImg = new Image();
         userImg.src = uploadedImageBase64;
         userImg.onload = function() {
@@ -160,7 +157,7 @@
             ctx.arc(380, 150, 61, 0, Math.PI * 2);
             ctx.stroke();
 
-            // 3. ടെക്സ്റ്റുകൾ പ്രിന്റ് ചെയ്യുന്നു
+            // 3. പേരും വിവരങ്ങളും ഒറിജിനൽ ഡിസൈനിന് മാച്ചായി പ്രിന്റ് ചെയ്യുന്നു
             ctx.textAlign = 'center';
             
             ctx.fillStyle = '#991b1b'; 
