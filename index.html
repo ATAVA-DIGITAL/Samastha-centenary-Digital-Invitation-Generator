@@ -20,7 +20,7 @@
         .container { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 3px solid var(--primary-gold); text-align: center; }
         
         .header-zone { margin-bottom: 25px; position: relative; }
-        .centenary-logo { width: 100px; height: auto; margin-bottom: 10px; }
+        .centenary-logo { width: 90px; height: auto; margin-bottom: 10px; }
         h1 { font-size: 1.6rem; font-weight: 900; color: #a12328; margin-bottom: 5px; }
         p.subtitle { font-size: 1rem; font-weight: 700; color: var(--samastha-green); margin-bottom: 15px; }
         .divider { height: 2px; background: linear-gradient(to right, transparent, var(--primary-gold), transparent); margin-bottom: 20px; }
@@ -42,8 +42,6 @@
 
         .preview-zone { margin-top: 25px; display: none; }
         .preview-zone h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark-brown); font-weight: 800; }
-        
-        /* ഒറിജിനൽ ഇമേജിന്റെ അതേ 3:4 റേഷ്യോയിലേക്ക് കാൻവാസ് സൈസ് മാറ്റി */
         canvas { width: 100%; border-radius: 12px; border: 2px solid var(--primary-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: block; background-color: #fff; }
 
         .footer-tag { margin-top: 25px; font-size: 0.9rem; font-weight: bold; color: #5c5343; line-height: 1.5; border-top: 1px dashed var(--primary-gold); padding-top: 15px; }
@@ -53,13 +51,16 @@
 <body>
 
     <div class="container">
+        <!-- HEADER -->
         <div class="header-zone">
-            <img id="headerLogo" class="centenary-logo" alt="Samastha Centenary Logo">
+            <!-- ലോഗോ നേരിട്ട് കോഡിൽ സെറ്റ് ചെയ്തു -->
+            <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
             <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
             <div class="divider"></div>
         </div>
 
+        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -70,6 +71,7 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
+        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -77,15 +79,19 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
+        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
+        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <canvas id="inviteCanvas" width="600" height="800"></canvas>
+            <!-- ഒറിജിനൽ പോസ്റ്ററിന്റെ വീതിയും നീളവും (450x570) കൃത്യമായി സെറ്റ് ചെയ്തു -->
+            <canvas id="inviteCanvas" width="450" height="570"></canvas>
         </div>
 
+        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -93,5 +99,152 @@
     </div>
 
 <script>
-    // 1. ലോഗോ നേരിട്ട് ടെക്സ്റ്റ് ഡാറ്റയായി കോഡിലേക്ക് കയറ്റി (CORS പ്രോബ്ലം വരില്ല)
-    const logoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAAB49nmBAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUwUExURf8A//8A/wD//wD/AP///////wAAAP///wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAH/C05fY2EAAAM0UExURf96df96df96df95df95df95dv95dv95dv95dv95dv95dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv96dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv95dv
+    let uploadedImageBase64 = null;
+
+    // ഹെഡറിലെ ലോഗോ ഇമേജ് കാണിക്കാൻ വേണ്ടി ഒറിജിനൽ ഫയൽ നെയിം സെറ്റ് ചെയ്യുന്നു
+    document.getElementById('topLogo').src = 'logo.png.jpg';
+    // ഇൻഫെക്റ്റ് അത് കിട്ടിയില്ലെങ്കിൽ പഴയ ലോഗോ നെയിമിലേക്ക് മാറും
+    document.getElementById('topLogo').onerror = function() { this.src = 'logo.png'; };
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file) {
+            document.getElementById('uploadStatusText').innerText = "ഫോട്ടോ റെഡിയാണ്: " + file.name;
+            document.getElementById('uploadStatusText').style.color = "var(--samastha-green)";
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                uploadedImageBase64 = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    function generateInvitation() {
+        const name = document.getElementById('userName').value.trim();
+        const place = document.getElementById('userPlace').value.trim();
+        const canvas = document.getElementById('inviteCanvas');
+        const ctx = canvas.getContext('2d');
+
+        if(!name || !place) {
+            alert("ദയവായി പേരും സ്ഥലവും കൃത്യമായി ടൈപ്പ് ചെയ്യുക ബ്രോ!");
+            return;
+        }
+        if(!uploadedImageBase64) {
+            alert("ക്ഷണക്കത്തിൽ വെക്കാൻ ഒരു അടിപൊളി ഫോട്ടോ കൂടി അപ്‌ലോഡ് ചെയ്യ് ബ്രോ!");
+            return;
+        }
+
+        document.getElementById('previewArea').style.display = 'block';
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // നിന്റെ ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് ലോഡ് ആകുന്നു
+        const renderBg = new Image();
+        renderBg.onload = function() {
+            // 1. പ്രധാന ബാക്ക്ഗ്രൗണ്ട് പോസ്റ്റർ വരയ്ക്കുന്നു
+            ctx.drawImage(renderBg, 0, 0, canvas.width, canvas.height);
+
+            // 2. അപ്‌ലോഡ് ചെയ്ത ആളുടെ ഫോട്ടോ വരയ്ക്കുന്നു (ലോഗോയ്ക്ക് മുകളിലുള്ള വട്ടത്തിൽ വരാൻ)
+            const userImg = new Image();
+            userImg.onload = function() {
+                ctx.save();
+                ctx.beginPath();
+                // പോസ്റ്ററിലെ വട്ടത്തിന് അനുസരിച്ച് (X: 345, Y: 290, Radius: 45) മാറ്റി സെറ്റ് ചെയ്തു
+                ctx.arc(345, 290, 45, 0, Math.PI * 2); 
+                ctx.clip();
+                ctx.drawImage(userImg, 300, 245, 90, 90);
+                ctx.restore();
+
+                // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു ഗോൾഡൻ ബോർഡർ ഫ്രെയിം
+                ctx.strokeStyle = '#c5a03b';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                ctx.arc(345, 290, 46, 0, Math.PI * 2);
+                ctx.stroke();
+
+                // 3. പേരും സ്ഥലവും പോസ്റ്ററിന്റെ താഴത്തെ വൈറ്റ് സ്പേസിൽ കൃത്യമായി പ്രിന്റ് ചെയ്യുന്നു
+                ctx.textAlign = 'center';
+                
+                // പേര് എഴുതാൻ (ഡാർക്ക് റെഡ് കളർ)
+                ctx.fillStyle = '#991b1b'; 
+                ctx.font = 'bold 22px sans-serif';
+                ctx.fillText(name, 225, 485); 
+                
+                // സ്ഥലം എഴുതാൻ (ഡാർക്ക് ഗ്രീൻ കളർ)
+                ctx.fillStyle = '#166534'; 
+                ctx.font = '600 16px sans-serif';
+                ctx.fillText(place, 225, 515);
+
+                // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
+                document.getElementById('downloadBtn').style.display = 'inline-flex';
+                document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
+            };
+            userImg.src = uploadedImageBase64;
+        };
+
+        // നിന്റെ ജിറ്റ്‌ഹബിലുള്ള രണ്ട് ടൈപ്പ് ബാക്ക്ഗ്രൗണ്ട് ഫയൽ നെയിമുകളും ബാക്കപ്പായി ലോഡ് ചെയ്യിക്കുന്നു
+        renderBg.onerror = function() {
+            const backupBg = new Image();
+            backupBg.onload = function() {
+                ctx.drawImage(backupBg, 0, 0, canvas.width, canvas.height);
+                // ബാക്കപ്പ് ലോഡ് ആയാലും ഫോട്ടോയും ടെക്സ്റ്റും വരാൻ വേണ്ടി വീണ്ടും കോൾ ചെയ്യുന്നു
+                renderBg.onload();
+            };
+            backupBg.onerror = function() {
+                // രണ്ടു ഫയലും കിട്ടിയില്ലെങ്കിൽ മാത്രം ഒരു ഡിസൈൻ ഫ്രെയിം ജനറേറ്റ് ചെയ്യും
+                ctx.fillStyle = "#fffcf7";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.strokeStyle = "#c5a03b";
+                ctx.lineWidth = 6;
+                ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
+                
+                ctx.fillStyle = '#a12328';
+                ctx.font = 'bold 24px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText("SAMASTHA CENTENARY", 225, 80);
+                ctx.fillStyle = '#198754';
+                ctx.font = 'bold 16px sans-serif';
+                ctx.fillText("100-ാം വാർഷിക സന്ദേശ കവാടം", 225, 110);
+                
+                // ഫോട്ടോ സെറ്റ് ചെയ്യുന്നു
+                const userImg = new Image();
+                userImg.onload = function() {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.arc(225, 230, 60, 0, Math.PI * 2);
+                    ctx.clip();
+                    ctx.drawImage(userImg, 165, 170, 120, 120);
+                    ctx.restore();
+                    
+                    ctx.textAlign = 'center';
+                    ctx.fillStyle = '#991b1b';
+                    ctx.font = 'bold 24px sans-serif';
+                    ctx.fillText(name, 225, 380);
+                    
+                    ctx.fillStyle = '#166534';
+                    ctx.font = '600 18px sans-serif';
+                    ctx.fillText(place, 225, 415);
+                    
+                    document.getElementById('downloadBtn').style.display = 'inline-flex';
+                };
+                userImg.src = uploadedImageBase64;
+            };
+            backupBg.src = 'bg.jpg';
+        };
+
+        // പ്രൈമറി ആയി 'bg.jpg.jpg' ലോഡ് ചെയ്യാൻ കൊടുക്കുന്നു
+        renderBg.src = 'bg.jpg.jpg';
+    }
+
+    function downloadImage() {
+        const canvas = document.getElementById('inviteCanvas');
+        const link = document.createElement('a');
+        const name = document.getElementById('userName').value.trim() || 'Samastha_Invitation';
+        
+        link.download = name + '_Centenary_Invite.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    }
+</script>
+</body>
+</html>
