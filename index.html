@@ -111,16 +111,27 @@
     }
 
     function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
-        // 1. നീ തന്ന ഒറിജിനൽ വൈറ്റ് സ്പേസ് ഉള്ള പോസ്റ്റർ വരയ്ക്കുന്നു
+        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // --- താഴെ വലതുവശത്തെ വൈറ്റ് ബോക്സിനുള്ളിലെ പ്രൊഫഷണൽ അലൈൻമെന്റ് ---
-        // വൈറ്റ് ബോക്സിന്റെ സെന്റർ കോർഡിനേറ്റ് X = 632 ആണ്.
+        // --- സൂപ്പർ ബ്ലെൻഡഡ് ഫ്രെയിം ഡിസൈൻ കോർഡിനേറ്റ്സ് ---
         const targetCenterX = 632;
-        const photoCenterY = 805; // ഫോട്ടോ വരയ്ക്കേണ്ട സെന്റർ Y
-        const radius = 65;        // ഫോട്ടോയുടെ വലിപ്പം അല്പം കൂട്ടി (ക്ലിയരിറ്റിക്ക് വേണ്ടി)
+        const photoCenterY = 802; 
+        const radius = 68;        
 
-        // 2. യൂസറുടെ ഫോട്ടോ ആ ബോക്സിന് മുകളിലായി കൃത്യം റൗണ്ടിൽ ക്ലിപ്പ് ചെയ്യുന്നു
+        // ഫോട്ടോയ്ക്കും ടെക്സ്റ്റിനും ബാക്ക്ഗ്രൗണ്ടുമായി ലയിക്കാൻ ഒരു സോഫ്റ്റ് ഗ്ലോ/ഷാഡോ ഇഫക്റ്റ്
+        ctx.save();
+        ctx.shadowColor = "rgba(44, 37, 25, 0.12)";
+        ctx.shadowBlur = 14;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 6;
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // 2. യൂസറുടെ ഫോട്ടോ വളരെ കൃത്യമായി റൗണ്ടിൽ ഫിറ്റ് ചെയ്യുന്നു
         ctx.save();
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2); 
@@ -128,27 +139,42 @@
         ctx.drawImage(userImg, targetCenterX - radius, photoCenterY - radius, radius * 2, radius * 2);
         ctx.restore();
 
-        // ഫോട്ടോയ്ക്ക് ചുറ്റും ഒരു പ്രൊഫഷണൽ തിൻ ഗോൾഡൻ ബോർഡർ ഫ്രെയിം
-        ctx.strokeStyle = '#c5a03b';
+        // ഇരട്ട ബോർഡർ ഡിസൈൻ (Double Border Line) - കൂടുതൽ പ്രൊഫഷണൽ ആക്കാൻ
+        // ഫസ്റ്റ് ബോർഡർ: സമസ്ത ഗ്രീൻ കളർ
+        ctx.strokeStyle = '#198754';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius + 1, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 3. പേരും സ്ഥലവും ഫോട്ടോയ്ക്ക് താഴെ സെന്റർ അലൈൻഡ് ആയി എഴുതുന്നു
+        // സെക്കൻഡ് ഔട്ടർ ബോർഡർ: ഗോൾഡൻ കളർ
+        ctx.strokeStyle = '#c5a03b';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.arc(targetCenterX, photoCenterY, radius + 4, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // 3. പേരും സ്ഥലവും ഭംഗിയായി ടൈപ്പോഗ്രാഫി സ്റ്റൈലിൽ കൊടുക്കുന്നു
         ctx.textAlign = 'center';
         
-        // പേര് ഡിസൈൻ (Samastha Dark Red - നല്ല ബോൾഡ് ആയിട്ട്)
-        ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 26px sans-serif';
-        ctx.fillText(name, targetCenterX, photoCenterY + radius + 35); 
-        
-        // സ്ഥലം ഡിസൈൻ (Samastha Green - ക്ലീൻ ലുക്ക്)
-        ctx.fillStyle = '#198754'; 
-        ctx.font = '600 20px sans-serif';
-        ctx.fillText(place, targetCenterX, photoCenterY + radius + 68);
+        // ചെറിയൊരു ടെക്സ്റ്റ് ഷാഡോ കൊടുത്ത് അക്ഷരങ്ങൾ കൂടുതൽ വ്യക്തമാക്കുന്നു
+        ctx.save();
+        ctx.shadowColor = "rgba(0, 0, 0, 0.05)";
+        ctx.shadowBlur = 3;
+        ctx.shadowOffsetY = 1;
 
-        // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
+        // പേര് ഡിസൈൻ (Samastha Dark Red - Bold & Premium Look)
+        ctx.fillStyle = '#a12328'; 
+        ctx.font = 'bold 28px sans-serif';
+        ctx.fillText(name, targetCenterX, photoCenterY + radius + 38); 
+        
+        // സ്ഥലം ഡിസൈൻ (Samastha Green - Semi Bold)
+        ctx.fillStyle = '#11623c'; 
+        ctx.font = '600 21px sans-serif';
+        ctx.fillText(place, targetCenterX, photoCenterY + radius + 72);
+        ctx.restore();
+
+        // ഡൗൺലോഡ് ബട്ടൺ ആക്റ്റീവ് ആക്കുന്നു
         document.getElementById('downloadBtn').style.display = 'inline-flex';
         document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
     }
@@ -187,7 +213,6 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
-        // ഫയൽ നെയിമിൽ സ്പേസ് ഉള്ളതുകൊണ്ട് വരാൻ സാധ്യതയുള്ള എറർ ഒഴിവാക്കാൻ ബാക്കപ്പ് ലിങ്ക്
         renderBg.onerror = function() {
             renderBg.src = 'bg.jpg'; 
         };
