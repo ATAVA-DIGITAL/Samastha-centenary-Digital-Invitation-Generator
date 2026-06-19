@@ -86,7 +86,6 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- ബാക്ക്ഗ്രൗണ്ടിന്റെ കൃത്യമായ റേഷ്യോ അനുസരിച്ചുള്ള കാൻവാസ് സൈസ് -->
             <canvas id="inviteCanvas" width="800" height="1000"></canvas>
         </div>
 
@@ -100,7 +99,6 @@
 <script>
     let uploadedImageBase64 = null;
 
-    // ലോഗോ ലോഡിങ് ബാക്കപ്പ് ഫയൽസെറ്റ്
     document.getElementById('topLogo').src = 'logo.png';
     document.getElementById('topLogo').onerror = function() { this.src = 'logo.png.jpg'; };
 
@@ -119,15 +117,26 @@
     }
 
     function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
-        // 1. നീ തന്ന പുതിയ ഒറിജിനൽ ക്ഷണക്കത്ത് വരികളുള്ള പോസ്റ്റർ വരയ്ക്കുന്നു
+        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // --- താഴെ വലതുവശത്തെ വൈറ്റ് ഫ്രെയിം ബോക്സ് കോർഡിനേറ്റ്സ് ---
-        const targetCenterX = 632;
-        const photoCenterY = 802; 
-        const radius = 68;        
+        // --- മാറ്റം 1: "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷം പേര് പ്രിന്റ് ചെയ്യുന്നു ---
+        ctx.save();
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#a12328'; // പേരിന് നല്ല ഡാർക്ക് റെഡ് കളർ
+        ctx.font = 'bold 24px sans-serif';
+        // "പ്രിയപ്പെട്ട" എന്ന ടെക്സ്റ്റിന് തൊട്ടടുത്ത് വരാൻ പാകത്തിലുള്ള കോർഡിനേറ്റ്സ് (X: 232, Y: 528)
+        ctx.fillText(name + ",", 232, 528); 
+        ctx.restore();
 
-        // ഫോട്ടോയ്ക്കും ടെക്സ്റ്റിനും ബാക്ക്ഗ്രൗണ്ടുമായി ലയിക്കാൻ ഒരു സോഫ്റ്റ് ഷാഡോ ഇഫക്റ്റ്
+
+        // --- മാറ്റം 2: വൈറ്റ് ബോക്സിന്റെ ഉള്ളിൽ കൃത്യം സെന്റർ അലൈൻമെന്റ് ---
+        // നീ തന്ന ഇമേജിലെ വൈറ്റ് ഫ്രെയിം ബോക്സിന്റെ കറക്റ്റ് സെന്റർ വരുന്നത് X = 810 ആണ്.
+        const targetCenterX = 810; 
+        const photoCenterY = 800;  // ഫോട്ടോ ഇരിക്കേണ്ട കൃത്യമായ ഉയരം
+        const radius = 68;         // ഫോട്ടോയുടെ വലിപ്പം
+
+        // ഫോട്ടോയ്ക്കും ടെക്സ്റ്റിനും ബാക്ക്ഗ്രൗണ്ടുമായി ലയിക്കാൻ ഒരു സോഫ്റ്റ് ഗ്ലോ/ഷാഡോ
         ctx.save();
         ctx.shadowColor = "rgba(44, 37, 25, 0.12)";
         ctx.shadowBlur = 14;
@@ -139,7 +148,7 @@
         ctx.fill();
         ctx.restore();
 
-        // 2. യൂസറുടെ ഫോട്ടോ വളരെ കൃത്യമായി റൗണ്ടിൽ ഫിറ്റ് ചെയ്യുന്നു
+        // യൂസറുടെ ഫോട്ടോ വളരെ കൃത്യമായി റൗണ്ടിൽ ഫിറ്റ് ചെയ്യുന്നു
         ctx.save();
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2); 
@@ -147,22 +156,22 @@
         ctx.drawImage(userImg, targetCenterX - radius, photoCenterY - radius, radius * 2, radius * 2);
         ctx.restore();
 
-        // ഇരട്ട ബോർഡർ ഡിസൈൻ (Double Border Line) - പ്രൊഫഷണൽ ആക്കാൻ
-        // ഫസ്റ്റ് ബോർഡർ: സമസ്ത ഗ്രീൻ കളർ
+        // ഡബിൾ ബോർഡർ ഫ്രെയിം ഡിസൈൻ
+        // ഇന്നർ ബോർഡർ: സമസ്ത ഗ്രീൻ
         ctx.strokeStyle = '#198754';
         ctx.lineWidth = 3;
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius + 1, 0, Math.PI * 2);
         ctx.stroke();
 
-        // സെക്കൻഡ് ഔട്ടർ ബോർഡർ: ഗോൾഡൻ കളർ
+        // ഔട്ടർ ബോർഡർ: ഗോൾഡൻ
         ctx.strokeStyle = '#c5a03b';
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius + 4, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 3. പേരും സ്ഥലവും ഭംഗിയായി ടൈപ്പോഗ്രാഫി സ്റ്റൈലിൽ നൽകുന്നു
+        // പേരും സ്ഥലവും ബോക്സിന്റെ സെന്ററിൽ കൊടുക്കുന്നു
         ctx.textAlign = 'center';
         
         ctx.save();
@@ -170,12 +179,12 @@
         ctx.shadowBlur = 3;
         ctx.shadowOffsetY = 1;
 
-        // പേര് ഡിസൈൻ (Samastha Dark Red)
+        // ഫ്രെയിമിലെ പേര് ഡിസൈൻ (Samastha Dark Red - Bold)
         ctx.fillStyle = '#a12328'; 
         ctx.font = 'bold 28px sans-serif';
         ctx.fillText(name, targetCenterX, photoCenterY + radius + 38); 
         
-        // സ്ഥലം ഡിസൈൻ (Samastha Green)
+        // ഫ്രെയിമിലെ സ്ഥലം ഡിസൈൻ (Samastha Green)
         ctx.fillStyle = '#11623c'; 
         ctx.font = '600 21px sans-serif';
         ctx.fillText(place, targetCenterX, photoCenterY + radius + 72);
@@ -220,7 +229,6 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
-        // ഫയൽ എറർ വരാതിരിക്കാൻ ബാക്കപ്പ് ലോഡിങ്
         renderBg.onerror = function() {
             renderBg.src = 'bg1.jpg'; 
         };
