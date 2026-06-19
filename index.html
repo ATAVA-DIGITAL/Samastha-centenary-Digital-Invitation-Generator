@@ -3,195 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samastha Centenary Invitation Generator</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Samasta Centenary Poster</title>
     <style>
-        :root {
-            --bg-gradient: linear-gradient(135deg, #f5f0e1 0%, #e8dec9 100%);
-            --primary-gold: #c5a03b;
-            --dark-brown: #2c2519;
-            --samastha-green: #198754;
-            --card-bg: #ffffff;
+        /* പോസ്റ്ററിന്റെ പ്രധാന ബോക്സ് */
+        .poster-container {
+            position: relative;
+            width: 800px;  /* ഇമേജിന്റെ കൃത്യമായ വീതി ആവശ്യാനുസരണം മാറ്റാം */
+            height: 1000px; /* ഇമേജിന്റെ കൃത്യമായ നീളം ആവശ്യാനുസരണം മാറ്റാം */
+            background-image: url('bg4.jpg');
+            background-size: cover;
+            background-position: center;
+            font-family: 'Gayathri', 'Manjari', sans-serif; /* മലയാളം ഫോണ്ടുകൾ */
+            font-weight: bold;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background: var(--bg-gradient); color: var(--dark-brown); min-height: 100vh; padding: 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        /* 'പ്രിയപ്പെട്ട' എന്ന് കഴിഞ്ഞിട്ട് വരുന്ന പേര് */
+        .guest-name {
+            position: absolute;
+            top: 512px;       /* മുകളിൽ നിന്നുള്ള ദൂരം (ഇത് അഡ്ജസ്റ്റ് ചെയ്യാം) */
+            left: 205px;      /* ഇടത്തുനിന്നുള്ള ദൂരം */
+            font-size: 20px;
+            color: #8b0000;   /* കടും ചുവപ്പ് നിറം */
+            white-space: nowrap;
+        }
 
-        .container { background: var(--card-bg); width: 100%; max-width: 500px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 3px solid var(--primary-gold); text-align: center; }
-        
-        .header-zone { margin-bottom: 25px; position: relative; }
-        h1 { font-size: 1.6rem; font-weight: 900; color: #a12328; margin-bottom: 5px; }
-        p.subtitle { font-size: 1rem; font-weight: 700; color: var(--samastha-green); margin-bottom: 15px; }
-        .divider { height: 2px; background: linear-gradient(to right, transparent, var(--primary-gold), transparent); margin-bottom: 20px; }
+        /* ഫോട്ടോ വെക്കാനുള്ള റൗണ്ട് സ്പേസ് */
+        .photo-space {
+            position: absolute;
+            bottom: 145px;     /* താഴെ നിന്നുള്ള ദൂരം */
+            right: 62px;       /* വലത്തുനിന്നുള്ള ദൂരം */
+            width: 172px;      /* വട്ടത്തിന്റെ വീതി */
+            height: 172px;     /* വട്ടത്തിന്റെ നീളം */
+            border-radius: 50%; /* ഫോട്ടോ കൃത്യം വട്ടത്തിലാക്കാൻ */
+            overflow: hidden;
+        }
 
-        .form-group { text-align: left; margin-bottom: 18px; }
-        .form-group label { display: block; font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--dark-brown); }
-        .form-group input { width: 100%; padding: 14px; border: 2px solid #cbd5e1; border-radius: 10px; font-size: 1.1rem; font-weight: 600; background: #faf9f5; }
-        .form-group input:focus { outline: none; border-color: var(--primary-gold); background: #fff; }
+        .photo-space img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-        .file-upload-wrapper { border: 2px dashed var(--primary-gold); background: #fdfbf7; padding: 20px; border-radius: 10px; text-align: center; cursor: pointer; margin-bottom: 20px; }
-        .file-upload-wrapper i { font-size: 2rem; color: var(--primary-gold); margin-bottom: 8px; }
-        .file-upload-wrapper p { font-size: 0.95rem; font-weight: bold; }
-        #photoInput { display: none; }
+        /* ഫോട്ടോയ്ക്ക് താഴെയുള്ള പേരും സ്ഥലവും */
+        .details-space {
+            position: absolute;
+            bottom: 50px;      /* താഴെ നിന്നുള്ള ദൂരം */
+            right: 30px;       /* വലത്തുനിന്നുള്ള ദൂരം */
+            width: 240px;      /* ടെക്സ്റ്റ് ബോക്സിന്റെ വീതി */
+            text-align: center;
+            line-height: 1.4;
+        }
 
-        .btn { width: 100%; padding: 16px; border: none; border-radius: 10px; font-size: 1.2rem; font-weight: 800; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 10px; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .btn-generate { background: linear-gradient(135deg, #c5a03b 0%, #aa842c 100%); color: #fff; }
-        .btn-generate:hover { transform: translateY(-2px); }
-        .btn-download { background: linear-gradient(135deg, #198754 0%, #11623c 100%); color: #fff; margin-top: 15px; display: none; }
+        .user-name {
+            font-size: 20px;
+            color: #1a1a1a;
+            margin: 0;
+        }
 
-        .preview-zone { margin-top: 25px; display: none; }
-        .preview-zone h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--dark-brown); font-weight: 800; }
-        
-        canvas { width: 100%; border-radius: 12px; border: 2px solid var(--primary-gold); box-shadow: 0 8px 20px rgba(0,0,0,0.15); display: block; background-color: #fff; }
-
-        .footer-tag { margin-top: 25px; font-size: 0.9rem; font-weight: bold; color: #5c5343; line-height: 1.5; border-top: 1px dashed var(--primary-gold); padding-top: 15px; }
-        .author-name { color: #a12328; font-weight: 800; font-size: 1rem; margin-top: 3px; display: inline-block; }
+        .user-place {
+            font-size: 16px;
+            color: #555555;
+            margin: 2px 0 0 0;
+        }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header-zone">
-            <h1>SAMASTHA CENTENARY</h1>
-            <p class="subtitle">100-ാം വാർഷിക സന്ദേശ കവാടം</p>
-            <div class="divider"></div>
+    <div class="poster-container">
+        
+        <!-- 'പ്രിയപ്പെട്ട' എന്നതിന് ശേഷം വരേണ്ട പേര് ഇവിടെ നൽകുക -->
+        <div class="guest-name">മുഹമ്മദ് റാഫി</div>
+
+        <!-- ഫോട്ടോ ഇവിടെ ചേർക്കുക (user-photo.jpg എന്നതിന് പകരം നിങ്ങളുടെ ഫോട്ടോയുടെ പേര് നൽകുക) -->
+        <div class="photo-space">
+            <img src="user-photo.jpg" alt="Photo">
         </div>
 
-        <div class="form-group">
-            <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
-            <input type="text" id="userName" placeholder="e.g. ABDULLA KP">
+        <!-- ഫോട്ടോയ്ക്ക് താഴെ വരേണ്ട പേരും സ്ഥലവും ഇവിടെ നൽകുക -->
+        <div class="details-space">
+            <p class="user-name">പി. കെ. അൻവർ സദാത്</p>
+            <p class="user-place">മലപ്പുറം</p>
         </div>
 
-        <div class="form-group">
-            <label><i class="fa-solid fa-location-dot"></i> സ്ഥലം (Place)</label>
-            <input type="text" id="userPlace" placeholder="e.g. VAZHAKKAD">
-        </div>
-
-        <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
-        <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
-            <i class="fa-solid fa-cloud-arrow-up"></i>
-            <p id="uploadStatusText">ക്ലിക്ക് ചെയ്ത് ഫോട്ടോ തിരഞ്ഞെടുക്കുക</p>
-            <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
-        </div>
-
-        <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
-        <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
-
-        <div class="preview-zone" id="previewArea">
-            <div class="divider" style="margin-top: 20px;"></div>
-            <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <!-- ഒറിജിനൽ പോസ്റ്ററിന്റെ അതേ ആസ്പെക്ട് റേഷ്യോ നിലനിർത്താൻ വിഡ്ത്തും ഹൈറ്റും അപ്ഡേറ്റ് ചെയ്തു -->
-            <canvas id="inviteCanvas" width="1080" height="1350"></canvas>
-        </div>
-
-        <div class="footer-tag">
-            Developed by ATAVA DIGITAL SERVICES & TRADING <br>
-            <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
-        </div>
     </div>
-
-<script>
-    let uploadedImage = null;
-
-    function handleFileSelect(event) {
-        const file = event.target.files[0];
-        if (file) {
-            document.getElementById('uploadStatusText').innerText = "ഫോട്ടോ റെഡിയാണ്!";
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                uploadedImage = new Image();
-                uploadedImage.src = e.target.result;
-            }
-            reader.readAsDataURL(file);
-        }
-    }
-
-    function generateInvitation() {
-        const name = document.getElementById('userName').value.trim();
-        const place = document.getElementById('userPlace').value.trim();
-
-        if (!name || !place || !uploadedImage) {
-            alert("ദയവായി പേര്, സ്ഥലം, ഫോട്ടോ എന്നിവ നൽകുക!");
-            return;
-        }
-
-        const canvas = document.getElementById('inviteCanvas');
-        const ctx = canvas.getContext('2d');
-
-        // bg3.jpg ബാക്ക്ഗ്രൗണ്ടായി ലോഡ് ചെയ്യുന്നു
-        const bgImage = new Image();
-        bgImage.src = 'bg3.jpg'; 
-
-        bgImage.onload = function() {
-            // കാൻവാസ് ക്ലിയർ ചെയ്ത് ബാക്ക്ഗ്രൗണ്ട് വരയ്ക്കുന്നു
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.drawImage(bgImage, 0, 0, canvas.width, canvas.height);
-
-            // --- 1. വട്ടത്തിൽ ഫോട്ടോ വരയ്ക്കുന്നു (വലതുവശത്തെ കൃത്യമായ സ്പേസിൽ) ---
-            ctx.save();
-            // വട്ടത്തിന്റെ സെന്ററും റേഡിയസും (റൗണ്ട് ബോക്സിന് അനുയോജ്യമായത്)
-            const centerX = 830; 
-            const centerY = 560; 
-            const radius = 170;  
-
-            ctx.beginPath();
-            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
-            ctx.closePath();
-            ctx.clip();
-
-            // ഇമേജ് സെന്റർ ചെയ്ത് സ്കെയിൽ ചെയ്ത് വരയ്ക്കുന്നു
-            const hRatio = (radius * 2) / uploadedImage.width;
-            const vRatio = (radius * 2) / uploadedImage.height;
-            const ratio  = Math.max(hRatio, vRatio);
-            const centerShift_x = (radius * 2 - uploadedImage.width * ratio) / 2;
-            const centerShift_y = (radius * 2 - uploadedImage.height * ratio) / 2;  
-            
-            ctx.drawImage(uploadedImage, 0, 0, uploadedImage.width, uploadedImage.height, 
-                          (centerX - radius) + centerShift_x, (centerY - radius) + centerShift_y, 
-                          uploadedImage.width * ratio, uploadedImage.height * ratio);
-            ctx.restore();
-
-            // --- 2. "പ്രിയപ്പെട്ട..." എന്നതിന്റെ കൂടെ പേര് വരയ്ക്കുന്നു (Paragraph Space) ---
-            ctx.font = "bold 28px 'Segoe UI', sans-serif";
-            ctx.fillStyle = "#b81d24"; // ചുവപ്പ് നിറം
-            ctx.textAlign = "left";
-            // ചിത്രത്തിൽ "പ്രിയപ്പെട്ട" എന്ന് എഴുതിയതിന്റെ കൃത്യം വലതുവശത്തായി ഈ കോർഡിനേറ്റ്സ് വരും
-            ctx.fillText(name, 280, 532); 
-
-            // --- 3. ഫോട്ടോയുടെ താഴെ പേരും സ്ഥലവും വലിയ അക്ഷരത്തിൽ വരയ്ക്കുന്നു ---
-            ctx.textAlign = "center";
-            
-            // വലിയ പേര് (Bold Red)
-            ctx.font = "800 32px 'Segoe UI', sans-serif";
-            ctx.fillStyle = "#b81d24";
-            ctx.fillText(name.toUpperCase(), 830, 890);
-
-            // സ്ഥലം (Bold Brown/Dark)
-            ctx.font = "800 30px 'Segoe UI', sans-serif";
-            ctx.fillStyle = "#2c2519";
-            ctx.fillText(place.toUpperCase(), 830, 940);
-
-            // പ്രിവ്യൂ ഏരിയ കാണിക്കുന്നു
-            document.getElementById('previewArea').style.display = 'block';
-            document.getElementById('downloadBtn').style.display = 'inline-flex';
-            
-            // ജനറേറ്റ് ചെയ്ത ശേഷം അങ്ങോട്ട് സ്ക്രോൾ ചെയ്യും
-            document.getElementById('previewArea').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        bgImage.onerror = function() {
-            alert("bg2.jpg ലോഡ് ചെയ്യാൻ കഴിഞ്ഞില്ല. ഫയൽ അതേ ഫോൾഡറിൽ ഉണ്ടെന്ന് ഉറപ്പാക്കുക.");
-        };
-    }
-
-    function downloadImage() {
-        const canvas = document.getElementById('inviteCanvas');
-        const link = document.createElement('a');
-        link.download = 'Samastha_Centenary_Invitation.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    }
-</script>
 
 </body>
 </html>
