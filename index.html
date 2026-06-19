@@ -51,6 +51,7 @@
 <body>
 
     <div class="container">
+        <!-- HEADER -->
         <div class="header-zone">
             <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
@@ -58,6 +59,7 @@
             <div class="divider"></div>
         </div>
 
+        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -68,6 +70,7 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
+        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -75,15 +78,19 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
+        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
+        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
+            <!-- ബാക്ക്ഗ്രൗണ്ടിന്റെ കൃത്യമായ റേഷ്യോ അനുസരിച്ചുള്ള കാൻവാസ് സൈസ് -->
             <canvas id="inviteCanvas" width="800" height="1000"></canvas>
         </div>
 
+        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -93,6 +100,7 @@
 <script>
     let uploadedImageBase64 = null;
 
+    // ലോഗോ ലോഡിങ് ബാക്കപ്പ് ഫയൽസെറ്റ്
     document.getElementById('topLogo').src = 'logo.png';
     document.getElementById('topLogo').onerror = function() { this.src = 'logo.png.jpg'; };
 
@@ -111,15 +119,15 @@
     }
 
     function drawAllElements(ctx, canvas, bgImg, userImg, name, place) {
-        // 1. ഒറിജിനൽ ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
+        // 1. നീ തന്ന പുതിയ ഒറിജിനൽ ക്ഷണക്കത്ത് വരികളുള്ള പോസ്റ്റർ വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
 
-        // --- സൂപ്പർ ബ്ലെൻഡഡ് ഫ്രെയിം ഡിസൈൻ കോർഡിനേറ്റ്സ് ---
+        // --- താഴെ വലതുവശത്തെ വൈറ്റ് ഫ്രെയിം ബോക്സ് കോർഡിനേറ്റ്സ് ---
         const targetCenterX = 632;
         const photoCenterY = 802; 
         const radius = 68;        
 
-        // ഫോട്ടോയ്ക്കും ടെക്സ്റ്റിനും ബാക്ക്ഗ്രൗണ്ടുമായി ലയിക്കാൻ ഒരു സോഫ്റ്റ് ഗ്ലോ/ഷാഡോ ഇഫക്റ്റ്
+        // ഫോട്ടോയ്ക്കും ടെക്സ്റ്റിനും ബാക്ക്ഗ്രൗണ്ടുമായി ലയിക്കാൻ ഒരു സോഫ്റ്റ് ഷാഡോ ഇഫക്റ്റ്
         ctx.save();
         ctx.shadowColor = "rgba(44, 37, 25, 0.12)";
         ctx.shadowBlur = 14;
@@ -139,7 +147,7 @@
         ctx.drawImage(userImg, targetCenterX - radius, photoCenterY - radius, radius * 2, radius * 2);
         ctx.restore();
 
-        // ഇരട്ട ബോർഡർ ഡിസൈൻ (Double Border Line) - കൂടുതൽ പ്രൊഫഷണൽ ആക്കാൻ
+        // ഇരട്ട ബോർഡർ ഡിസൈൻ (Double Border Line) - പ്രൊഫഷണൽ ആക്കാൻ
         // ഫസ്റ്റ് ബോർഡർ: സമസ്ത ഗ്രീൻ കളർ
         ctx.strokeStyle = '#198754';
         ctx.lineWidth = 3;
@@ -154,21 +162,20 @@
         ctx.arc(targetCenterX, photoCenterY, radius + 4, 0, Math.PI * 2);
         ctx.stroke();
 
-        // 3. പേരും സ്ഥലവും ഭംഗിയായി ടൈപ്പോഗ്രാഫി സ്റ്റൈലിൽ കൊടുക്കുന്നു
+        // 3. പേരും സ്ഥലവും ഭംഗിയായി ടൈപ്പോഗ്രാഫി സ്റ്റൈലിൽ നൽകുന്നു
         ctx.textAlign = 'center';
         
-        // ചെറിയൊരു ടെക്സ്റ്റ് ഷാഡോ കൊടുത്ത് അക്ഷരങ്ങൾ കൂടുതൽ വ്യക്തമാക്കുന്നു
         ctx.save();
         ctx.shadowColor = "rgba(0, 0, 0, 0.05)";
         ctx.shadowBlur = 3;
         ctx.shadowOffsetY = 1;
 
-        // പേര് ഡിസൈൻ (Samastha Dark Red - Bold & Premium Look)
+        // പേര് ഡിസൈൻ (Samastha Dark Red)
         ctx.fillStyle = '#a12328'; 
         ctx.font = 'bold 28px sans-serif';
         ctx.fillText(name, targetCenterX, photoCenterY + radius + 38); 
         
-        // സ്ഥലം ഡിസൈൻ (Samastha Green - Semi Bold)
+        // സ്ഥലം ഡിസൈൻ (Samastha Green)
         ctx.fillStyle = '#11623c'; 
         ctx.font = '600 21px sans-serif';
         ctx.fillText(place, targetCenterX, photoCenterY + radius + 72);
@@ -213,20 +220,21 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
+        // ഫയൽ എറർ വരാതിരിക്കാൻ ബാക്കപ്പ് ലോഡിങ്
         renderBg.onerror = function() {
-            renderBg.src = 'bg.jpg'; 
+            renderBg.src = 'bg1.jpg'; 
         };
 
-        renderBg.src = 'back ground.jpg';
+        renderBg.src = 'bg1.jpg';
         userImg.src = uploadedImageBase64;
     }
 
     function downloadImage() {
         const canvas = document.getElementById('inviteCanvas');
         const link = document.createElement('a');
-        const name = document.getElementById('userName').value.trim() || 'Samastha_Invitation';
+        const name = document.getElementById('userName').value.trim() || 'Samastha_Centenary_Invite';
         
-        link.download = name + '_Centenary_Invite.png';
+        link.download = name + '_Invite.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
     }
