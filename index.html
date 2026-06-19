@@ -47,7 +47,6 @@
         .footer-tag { margin-top: 25px; font-size: 0.9rem; font-weight: bold; color: #5c5343; line-height: 1.5; border-top: 1px dashed var(--primary-gold); padding-top: 15px; }
         .author-name { color: #a12328; font-weight: 800; font-size: 1rem; margin-top: 3px; display: inline-block; }
         
-        /* ഒളിപ്പിച്ചു വെച്ചിരിക്കുന്ന ഇമേജ് എലമെന്റുകൾ (ലോഡിങ് എറർ ഒഴിവാക്കാൻ) */
         #hiddenBgAsset, #hiddenUserAsset { display: none; }
     </style>
 </head>
@@ -87,7 +86,7 @@
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <canvas id="inviteCanvas"></canvas>
+            <canvas id="inviteCanvas" width="1000" height="1250"></canvas>
         </div>
 
         <div class="footer-tag">
@@ -132,43 +131,39 @@
             return;
         }
 
-        // കാൻവാസ് വിസിബിൾ ആക്കുന്നു
         document.getElementById('previewArea').style.display = 'block';
 
-        // ഇമേജിന്റെ ഒറിജിനൽ വലിപ്പത്തിലേക്ക് കാൻവാസിനെ ഡയനാമിക് ആയി മാറ്റുന്നു
-        canvas.width = bgImg.naturalWidth || 1000;
-        canvas.height = bgImg.naturalHeight || 1250;
+        // കാൻവാസ് വലുപ്പം 1000x1250 ആയി തന്നെ ഉറപ്പിച്ചു നിർത്തുന്നു
+        canvas.width = 1000;
+        canvas.height = 1250;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
-        ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+        // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് കറക്റ്റ് ഫിറ്റിൽ വരയ്ക്കുന്നു
+        ctx.drawImage(bgImg, 0, 0, 1000, 1250);
 
-        // --- 1. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള ടെക്സ്റ്റ് (Perfect Positioning) ---
+        // --- 2. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള പേര് (New Perfect Fixed Coordinates) ---
         ctx.save();
         ctx.textAlign = 'left';
         ctx.fillStyle = '#a12328'; 
         ctx.font = 'bold 30px sans-serif'; 
-        ctx.fillText(name + ",", 265, 524); 
+        ctx.fillText(name + ",", 300, 532); 
         ctx.restore();
 
-        // --- 2. വൈറ്റ് ബോക്സിന്റെ ഉള്ളിലെ പെർഫെക്റ്റ് സെന്റർ ഫിക്സ് ---
-        // റൗണ്ട് ഫോട്ടോ താഴത്തെ വെളുത്ത പെട്ടിക്ക് ഉള്ളിൽ കൃത്യമായി വരാൻ (X: 790, Y: 835)
-        const targetCenterX = 795; 
+        // --- 3. വെളുത്ത പെട്ടിയുടെ പെർഫെക്റ്റ് സെന്റർ ഫിക്സ് (X: 810, Y: 835) ---
+        const targetCenterX = 810; 
         const photoCenterY = 835;  
-        const radius = 85; 
+        const radius = 95; // ഫോട്ടോയുടെ വലിപ്പം പെട്ടിക്ക് പാകത്തിന് കൂട്ടി
 
-        // ഫോട്ടോയ്ക്ക് പിന്നിൽ സോഫ്റ്റ് വൈറ്റ് ഗ്ലോ
+        // ഫോട്ടോയ്ക്ക് പിന്നിൽ സോഫ്റ്റ് വൈറ്റ് റൗണ്ട്
         ctx.save();
-        ctx.shadowColor = "rgba(44, 37, 25, 0.15)";
-        ctx.shadowBlur = 15;
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
 
-        // യൂസറുടെ ഫോട്ടോ റൗണ്ടിൽ കൃത്യമായി ക്ലിപ്പ് ചെയ്യുന്നു
+        // യൂസറുടെ ഫോട്ടോ കറക്റ്റ് പെട്ടിക്കുള്ളിൽ റൗണ്ടിൽ ക്ലിപ്പ് ചെയ്യുന്നു
         ctx.save();
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2); 
@@ -189,7 +184,7 @@
         ctx.arc(targetCenterX, photoCenterY, radius + 5, 0, Math.PI * 2);
         ctx.stroke();
 
-        // --- 3. വൈറ്റ് ബോക്സിന് ഉള്ളിലെ പേരും സ്ഥലവും (Perfect Center Alignment) ---
+        // --- 4. പെട്ടിക്കുള്ളിലെ പേരും സ്ഥലവും (Perfect Center Alignment) ---
         ctx.textAlign = 'center';
         
         ctx.save();
