@@ -140,7 +140,6 @@
 
         document.getElementById('previewArea').style.display = 'block';
 
-        // ഫോട്ടോഷോപ്പിലെ കൃത്യമായ ക്യാൻവാസ് സൈസ് ലോക്ക് ചെയ്തു
         canvas.width = 912;
         canvas.height = 1146;
 
@@ -149,18 +148,18 @@
         // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
         ctx.drawImage(bgImg, 0, 0, 912, 1146);
 
-        // --- 2. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള പേര് ---
+        // --- 2. "പ്രിയപ്പെട്ട..." വരിയുടെ തൊട്ടുമുകളിൽ പേര് കൃത്യമായി സെറ്റ് ചെയ്യുന്നു ---
         ctx.save();
         ctx.textAlign = 'left';
         ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 28px sans-serif'; 
-        ctx.fillText(name + ",", 320, 465); 
+        ctx.font = 'bold 26px sans-serif'; 
+        ctx.fillText(name + ",", 135, 510); // "പ്രിയപ്പെട്ട" എന്ന എഴുത്തിന് തൊട്ടുമുകളിൽ വരും
         ctx.restore();
 
-        // --- 3. വെളുത്ത ബോക്സിന്റെ കറക്റ്റ് ഉള്ളിലേക്ക് ഫോട്ടോ ലോക്ക് ചെയ്യുന്നു ---
-        const boxCenterX = 715;   // ബോക്സിന്റെ കൃത്യം നടുഭാഗം
-        const photoCenterY = 840;  // ബോക്സിന്റെ മുകൾ ഭാഗം
-        const radius = 68;         // റൗണ്ട് ഫോട്ടോയുടെ വലിപ്പം
+        // --- 3. വെളുത്ത ബോക്സിന്റെ കൃത്യം സെന്ററിലേക്ക് ഫോട്ടോ മാറ്റുന്നു (X: 765) ---
+        const boxCenterX = 765;   // ബോക്സിന്റെ കൃത്യം സെന്റർ പോയിന്റ്
+        const photoCenterY = 825;  // ബോക്സിന്റെ ഉള്ളിൽ മുകൾ ഭാഗം
+        const radius = 68;         // ഫോട്ടോയുടെ വലിപ്പം
 
         // യൂസറുടെ ഫോട്ടോ ബോക്സിനുള്ളിൽ റൗണ്ടിൽ ക്ലിപ്പ് ചെയ്യുന്നു
         ctx.save();
@@ -183,19 +182,19 @@
         ctx.arc(boxCenterX, photoCenterY, radius + 5, 0, Math.PI * 2);
         ctx.stroke();
 
-        // --- 4. ബോക്സിനുള്ളിൽ ഫോട്ടോയ്ക്ക് താഴെ പേരും സ്ഥലവും (Name Details) ---
+        // --- 4. ബോക്സിനുള്ളിൽ ഫോട്ടോയ്ക്ക് താഴെ പേരും സ്ഥലവും സെന്റർ അലൈൻമെന്റ് ---
         ctx.textAlign = 'center';
         
         ctx.save();
         // ബോക്സിനുള്ളിലെ പേര് (Dark Red)
         ctx.fillStyle = '#a12328'; 
         ctx.font = 'bold 24px sans-serif';
-        ctx.fillText(name, boxCenterX, 955); 
+        ctx.fillText(name, boxCenterX, 945); 
         
         // ബോക്സിനുള്ളിലെ സ്ഥലം (Green)
         ctx.fillStyle = '#11623c'; 
         ctx.font = '600 18px sans-serif';
-        ctx.fillText(place, boxCenterX, 995); 
+        ctx.fillText(place, boxCenterX, 985); 
         ctx.restore();
 
         // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
