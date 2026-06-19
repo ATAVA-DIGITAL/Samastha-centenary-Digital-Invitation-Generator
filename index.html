@@ -52,10 +52,12 @@
 </head>
 <body>
 
+    <!-- പശ്ചാത്തല ചിത്രങ്ങൾ -->
     <img id="hiddenBgAsset" src="bg1.jpg" alt="background">
     <img id="hiddenUserAsset" src="" alt="user-photo">
 
     <div class="container">
+        <!-- HEADER -->
         <div class="header-zone">
             <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
@@ -63,6 +65,7 @@
             <div class="divider"></div>
         </div>
 
+        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -73,6 +76,7 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
+        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -80,15 +84,19 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
+        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
+        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <canvas id="inviteCanvas" width="1000" height="1250"></canvas>
+            <!-- ഇവിടെ നിന്റെ ഫോട്ടോഷോപ്പ് അളവ് (912x1146) ഹാർഡ്കോഡ് ചെയ്ത് ലോക്ക് ആക്കി -->
+            <canvas id="inviteCanvas" width="912" height="1146"></canvas>
         </div>
 
+        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -133,29 +141,29 @@
 
         document.getElementById('previewArea').style.display = 'block';
 
-        // കാൻവാസ് വലുപ്പം 1000x1250 ആയി തന്നെ ഉറപ്പിച്ചു നിർത്തുന്നു
-        canvas.width = 1000;
-        canvas.height = 1250;
+        // 912 x 1146 ആക്കി ക്യാൻവാസ് കൃത്യമായി ഉറപ്പിച്ചു
+        canvas.width = 912;
+        canvas.height = 1146;
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് കറക്റ്റ് ഫിറ്റിൽ വരയ്ക്കുന്നു
-        ctx.drawImage(bgImg, 0, 0, 1000, 1250);
+        // 1. ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കുന്നു
+        ctx.drawImage(bgImg, 0, 0, 912, 1146);
 
-        // --- 2. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള പേര് (New Perfect Fixed Coordinates) ---
+        // --- 2. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള പേര് (912 സൈസിനുള്ള പെർഫെക്റ്റ് സ്പേസ്) ---
         ctx.save();
         ctx.textAlign = 'left';
         ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 30px sans-serif'; 
-        ctx.fillText(name + ",", 300, 532); 
+        ctx.font = 'bold 28px sans-serif'; 
+        ctx.fillText(name + ",", 275, 538); 
         ctx.restore();
 
-        // --- 3. വെളുത്ത പെട്ടിയുടെ പെർഫെക്റ്റ് സെന്റർ ഫിക്സ് (X: 810, Y: 835) ---
-        const targetCenterX = 810; 
-        const photoCenterY = 835;  
-        const radius = 95; // ഫോട്ടോയുടെ വലിപ്പം പെട്ടിക്ക് പാകത്തിന് കൂട്ടി
+        // --- 3. വെളുത്ത പെട്ടിക്കുള്ളിലെ കറക്റ്റ് കോർഡിനേറ്റ് ഫിക്സ് (X: 565, Y: 830) ---
+        const targetCenterX = 565; 
+        const photoCenterY = 830;  
+        const radius = 85; 
 
-        // ഫോട്ടോയ്ക്ക് പിന്നിൽ സോഫ്റ്റ് വൈറ്റ് റൗണ്ട്
+        // ഫോട്ടോയ്ക്ക് പിന്നിൽ സോഫ്റ്റ് വൈറ്റ് മാസ്കിങ്
         ctx.save();
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
@@ -163,7 +171,7 @@
         ctx.fill();
         ctx.restore();
 
-        // യൂസറുടെ ഫോട്ടോ കറക്റ്റ് പെട്ടിക്കുള്ളിൽ റൗണ്ടിൽ ക്ലിപ്പ് ചെയ്യുന്നു
+        // യൂസറുടെ ഫോട്ടോ റൗണ്ടിൽ കൃത്യമായി ക്ലിപ്പ് ചെയ്യുന്നു
         ctx.save();
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2); 
@@ -184,22 +192,22 @@
         ctx.arc(targetCenterX, photoCenterY, radius + 5, 0, Math.PI * 2);
         ctx.stroke();
 
-        // --- 4. പെട്ടിക്കുള്ളിലെ പേരും സ്ഥലവും (Perfect Center Alignment) ---
+        // --- 4. പെട്ടിക്കുള്ളിലെ പേരും സ്ഥലവും (Perfect Alignment) ---
         ctx.textAlign = 'center';
         
         ctx.save();
         // പെട്ടിക്കുള്ളിലെ പേര് (Dark Red)
         ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 32px sans-serif';
-        ctx.fillText(name, targetCenterX, photoCenterY + radius + 45); 
+        ctx.font = 'bold 30px sans-serif';
+        ctx.fillText(name, targetCenterX, photoCenterY + radius + 42); 
         
         // പെട്ടിക്കുള്ളിലെ സ്ഥലം (Green)
         ctx.fillStyle = '#11623c'; 
-        ctx.font = '600 24px sans-serif';
-        ctx.fillText(place, targetCenterX, photoCenterY + radius + 85);
+        ctx.font = '600 22px sans-serif';
+        ctx.fillText(place, targetCenterX, photoCenterY + radius + 80);
         ctx.restore();
 
-        // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
+        // ഡൗൺലോഡ് ബട്ടൺ കാണിക്കുന്നു
         document.getElementById('downloadBtn').style.display = 'inline-flex';
         document.getElementById('downloadBtn').scrollIntoView({ behavior: 'smooth' });
     }
