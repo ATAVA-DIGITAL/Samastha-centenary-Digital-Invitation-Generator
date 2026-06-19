@@ -51,7 +51,6 @@
 <body>
 
     <div class="container">
-        <!-- HEADER -->
         <div class="header-zone">
             <img id="topLogo" class="centenary-logo" alt="Samastha Centenary Logo">
             <h1>SAMASTHA CENTENARY</h1>
@@ -59,7 +58,6 @@
             <div class="divider"></div>
         </div>
 
-        <!-- INPUT FIELDS -->
         <div class="form-group">
             <label><i class="fa-solid fa-user"></i> പൂർണ്ണമായ പേര് (Name)</label>
             <input type="text" id="userName" placeholder="e.g. അബ്ദുല്ല കെ.പി">
@@ -70,7 +68,6 @@
             <input type="text" id="userPlace" placeholder="e.g. മലപ്പുറം">
         </div>
 
-        <!-- PHOTO UPLOADER BOX -->
         <label><i class="fa-solid fa-camera"></i> നിങ്ങളുടെ ഫോട്ടോ (Upload Photo)</label>
         <div class="file-upload-wrapper" onclick="document.getElementById('photoInput').click()">
             <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -78,18 +75,15 @@
             <input type="file" id="photoInput" accept="image/*" onchange="handleFileSelect(event)">
         </div>
 
-        <!-- BUTTONS -->
         <button class="btn btn-generate" onclick="generateInvitation()"><i class="fa-solid fa-wand-magic-sparkles"></i> INVITATION ഉണ്ടാക്കൂ</button>
         <button class="btn btn-download" id="downloadBtn" onclick="downloadImage()"><i class="fa-solid fa-download"></i> ഗാലറിയിലേക്ക് ഡൗൺലോഡ് ചെയ്യുക</button>
 
-        <!-- LIVE IMAGE CANVAS PREVIEW -->
         <div class="preview-zone" id="previewArea">
             <div class="divider" style="margin-top: 20px;"></div>
             <h3>നിങ്ങളുടെ ഡിജിറ്റൽ ക്ഷണക്കത്ത്:</h3>
-            <canvas id="inviteCanvas" width="800" height="1000"></canvas>
+            <canvas id="inviteCanvas" width="1000" height="1250"></canvas>
         </div>
 
-        <!-- BRANDING FOOTER -->
         <div class="footer-tag">
             Developed by ATAVA DIGITAL SERVICES & TRADING <br>
             <span class="author-name">Abdul Salam Ahsani Vazhakkad</span>
@@ -121,30 +115,30 @@
         try {
             ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
         } catch (e) {
-            console.error("ബാക്ക്ഗ്രൗണ്ട് ഇമേജ് വരയ്ക്കാൻ പറ്റിയില്ല, വൈറ്റ് സ്പേസ് ബാക്ക്ഗ്രൗണ്ട് ഉപയോഗിക്കുന്നു.");
             ctx.fillStyle = "#faf9f5";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
 
-        // --- 1. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള ടെക്സ്റ്റ് അലൈൻമെന്റ് ---
+        // --- 1. "പ്രിയപ്പെട്ട..." വരിക്ക് ശേഷമുള്ള ടെക്സ്റ്റ് (Perfect Position) ---
         ctx.save();
         ctx.textAlign = 'left';
         ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 24px sans-serif';
-        ctx.fillText(name + ",", 205, 524); 
+        ctx.font = 'bold 30px sans-serif'; // വലിപ്പം അല്പം കൂട്ടി
+        ctx.fillText(name + ",", 260, 524); 
         ctx.restore();
 
-        // --- 2. വൈറ്റ് ബോക്സിന്റെ ഉള്ളിലെ പെർഫെക്റ്റ് സെന്റർ ---
-        const targetCenterX = 560; 
-        const photoCenterY = 785;  
-        const radius = 68;         
+        // --- 2. വൈറ്റ് ബോക്സിന്റെ ഉള്ളിലെ പെർഫെക്റ്റ് സെന്റർ കോർഡിനേറ്റ്സ് ---
+        // നിന്റെ bg1.jpg ഫയലിലെ വൈറ്റ് ഫ്രെയിമിന്റെ കൃത്യം നടുക്ക് വരാൻ X = 790, Y = 805
+        const targetCenterX = 790; 
+        const photoCenterY = 805;  
+        const radius = 85; // ഫോട്ടോയുടെ വലിപ്പം ബോക്സിന് പാകത്തിന് കൂട്ടി
 
         // ഫോട്ടോയ്ക്ക് പിന്നിൽ സോഫ്റ്റ് ഗ്ലോ
         ctx.save();
-        ctx.shadowColor = "rgba(44, 37, 25, 0.12)";
-        ctx.shadowBlur = 12;
+        ctx.shadowColor = "rgba(44, 37, 25, 0.15)";
+        ctx.shadowBlur = 15;
         ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 5;
+        ctx.shadowOffsetY = 6;
         ctx.fillStyle = "#ffffff";
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius, 0, Math.PI * 2);
@@ -161,36 +155,32 @@
             ctx.restore();
         }
 
-        // ഡബിൾ ബോർഡർ ലൈൻ ഡിസൈൻ
+        // ബോർഡർ ലൈൻ ഡിസൈൻ
         ctx.strokeStyle = '#198754';
-        ctx.lineWidth = 3;
+        ctx.lineWidth = 4;
         ctx.beginPath();
         ctx.arc(targetCenterX, photoCenterY, radius + 1, 0, Math.PI * 2);
         ctx.stroke();
 
         ctx.strokeStyle = '#c5a03b';
-        ctx.lineWidth = 1.5;
+        ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(targetCenterX, photoCenterY, radius + 4, 0, Math.PI * 2);
+        ctx.arc(targetCenterX, photoCenterY, radius + 5, 0, Math.PI * 2);
         ctx.stroke();
 
         // പേരും സ്ഥലവും വൈറ്റ് ബോക്സിന്റെ ഉള്ളിൽ കറക്റ്റ് നടുവിലാക്കുന്നു
         ctx.textAlign = 'center';
         
         ctx.save();
-        ctx.shadowColor = "rgba(0, 0, 0, 0.04)";
-        ctx.shadowBlur = 3;
-        ctx.shadowOffsetY = 1;
-
-        // വൈറ്റ് ഫ്രെയിമിനുള്ളിലെ പേര്
+        // വൈറ്റ് ഫ്രെയിമിനുള്ളിലെ പേര് (Samastha Dark Red)
         ctx.fillStyle = '#a12328'; 
-        ctx.font = 'bold 28px sans-serif';
-        ctx.fillText(name, targetCenterX, photoCenterY + radius + 38); 
+        ctx.font = 'bold 32px sans-serif';
+        ctx.fillText(name, targetCenterX, photoCenterY + radius + 45); 
         
-        // വൈറ്റ് ഫ്രെയിമിനുള്ളിലെ സ്ഥലം
+        // വൈറ്റ് ഫ്രെയിമിനുള്ളിലെ സ്ഥലം (Samastha Green)
         ctx.fillStyle = '#11623c'; 
-        ctx.font = '600 21px sans-serif';
-        ctx.fillText(place, targetCenterX, photoCenterY + radius + 72);
+        ctx.font = '600 24px sans-serif';
+        ctx.fillText(place, targetCenterX, photoCenterY + radius + 85);
         ctx.restore();
 
         // ഡൗൺലോഡ് ബട്ടൺ ഓപ്പൺ ആക്കുന്നു
@@ -222,7 +212,6 @@
         let bgLoaded = false;
         let userLoaded = false;
 
-        // ഫയൽ ഉണ്ടെങ്കിലും ഇല്ലെങ്കിലും പ്രോസസ്സ് മുന്നോട്ട് കൊണ്ടുപോകാനുള്ള സേഫ്റ്റി ലോജിക്
         renderBg.onload = function() {
             bgLoaded = true;
             if(userLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
@@ -233,10 +222,9 @@
             if(bgLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
-        // ഇമേജ് ഫയൽ മിസ്സിങ് ആയാൽ ലോഡിങ് സ്റ്റക്ക് ആവാതിരിക്കാൻ ഉള്ള എറർ ഹാൻഡ്‌ലർ
         renderBg.onerror = function() {
-            console.error("bg1.jpg കണ്ടെത്താൻ കഴിഞ്ഞില്ല! ഫയൽ നെയിം ചെക്ക് ചെയ്യുക.");
-            bgLoaded = true; // പ്രോസസ്സ് സ്റ്റക്കാവാതിരിക്കാൻ ട്രിഗർ ചെയ്യുന്നു
+            console.error("bg1.jpg കണ്ടെത്താൻ കഴിഞ്ഞില്ല!");
+            bgLoaded = true; 
             if(userLoaded) drawAllElements(ctx, canvas, renderBg, userImg, name, place);
         };
 
