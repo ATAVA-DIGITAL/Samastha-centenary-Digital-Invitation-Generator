@@ -71,7 +71,7 @@
                     <button onclick="switchTab('text-control')" id="tab-text-control" class="flex-1 text-[11px] font-bold py-2 px-2 rounded-lg text-slate-600 whitespace-nowrap">Text Controls</button>
                 </div>
 
-                <!-- Tab 1: Photo Inner Adjustment Controls -->
+                <!-- Tab 1: Photo Inner Adjustment Controls (Permanent Locked to image_92f7ae.png!) -->
                 <div id="controls-photo-adjust" class="space-y-4">
                     <div>
                         <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Photo Zoom</span><span id="scaleVal">1.25x</span></div>
@@ -83,8 +83,8 @@
                             <input type="range" id="photoX" min="-300" max="300" step="1" value="2" class="w-full accent-emerald-600">
                         </div>
                         <div>
-                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift Y</span><span id="shiftYVal">70px</span></div>
-                            <input type="range" id="photoY" min="-300" max="300" step="1" value="70" class="w-full accent-emerald-600">
+                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift Y</span><span id="shiftYVal">24px</span></div>
+                            <input type="range" id="photoY" min="-300" max="300" step="1" value="24" class="w-full accent-emerald-600">
                         </div>
                     </div>
                     <div>
@@ -239,7 +239,7 @@
         function resetControls() {
             document.getElementById('photoScale').value = 1.25;
             document.getElementById('photoX').value = 2;
-            document.getElementById('photoY').value = 70;
+            document.getElementById('photoY').value = 24; // Reset to 24px per permanent request
             document.getElementById('photoRotate').value = 0;
             
             document.getElementById('frameX').value = 822;
@@ -281,11 +281,10 @@
             const scaleFactorX = canvas.width / 1000;
             const scaleFactorY = canvas.height / 1250;
 
-            // Forced upper case transformation for a perfect professional look
             const userNameVal = document.getElementById('userName').value.trim().toUpperCase();
             const userDetailsVal = document.getElementById('userDetails').value.trim();
 
-            // 1. Render Invitation Custom Name right after 'Priyappetta' (CAPITAL LETTERS)
+            // 1. Render Invitation Custom Name right after 'Priyappetta'
             if (userNameVal) {
                 const textX = parseFloat(document.getElementById('textX').value) * scaleFactorX;
                 const textY = parseFloat(document.getElementById('textY').value) * scaleFactorY;
@@ -350,7 +349,7 @@
                 ctx.restore();
             }
 
-            // 3. Render Name & Place details matching dynamically below the moving frame (Name in CAPS)
+            // 3. Render Name & Place details matching dynamically below the moving frame
             const textBaseY = (circleCenterX && circleCenterY) ? (circleCenterY + circleRadius + (35 * scaleFactorY)) : 0;
             
             if (userNameVal) {
