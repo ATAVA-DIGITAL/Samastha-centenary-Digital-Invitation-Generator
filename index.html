@@ -64,46 +64,64 @@
             </div>
 
             <div class="border-t border-slate-100 pt-5 space-y-5">
-                <div class="flex gap-2 p-1 bg-slate-100 rounded-xl">
-                    <button onclick="switchTab('photo')" id="tab-photo" class="flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm">Photo Controls</button>
-                    <button onclick="switchTab('text')" id="tab-text" class="flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600">Text Controls</button>
+                <!-- Three Tab Navigation -->
+                <div class="flex gap-1 p-1 bg-slate-100 rounded-xl overflow-x-auto">
+                    <button onclick="switchTab('photo-adjust')" id="tab-photo-adjust" class="flex-1 text-[11px] font-bold py-2 px-2 rounded-lg bg-white text-emerald-800 shadow-sm whitespace-nowrap">Photo FineTune</button>
+                    <button onclick="switchTab('frame-pos')" id="tab-frame-pos" class="flex-1 text-[11px] font-bold py-2 px-2 rounded-lg text-slate-600 whitespace-nowrap">Frame Position</button>
+                    <button onclick="switchTab('text-control')" id="tab-text-control" class="flex-1 text-[11px] font-bold py-2 px-2 rounded-lg text-slate-600 whitespace-nowrap">Text Controls</button>
                 </div>
 
-                <!-- Photo Adjustment Tuning Controls -->
-                <div id="controls-photo" class="space-y-4">
+                <!-- Tab 1: Photo Inner Adjustment Controls -->
+                <div id="controls-photo-adjust" class="space-y-4">
                     <div>
                         <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Photo Zoom</span><span id="scaleVal">1.0x</span></div>
                         <input type="range" id="photoScale" min="0.1" max="3" step="0.05" value="1.0" class="w-full accent-emerald-600">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Shift X</span><span id="shiftXVal">0px</span></div>
+                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift X</span><span id="shiftXVal">0px</span></div>
                             <input type="range" id="photoX" min="-300" max="300" step="1" value="0" class="w-full accent-emerald-600">
                         </div>
                         <div>
-                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Shift Y</span><span id="shiftYVal">0px</span></div>
+                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift Y</span><span id="shiftYVal">0px</span></div>
                             <input type="range" id="photoY" min="-300" max="300" step="1" value="0" class="w-full accent-emerald-600">
                         </div>
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Rotate</span><span id="rotateVal">0°</span></div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Rotate Photo</span><span id="rotateVal">0°</span></div>
                         <input type="range" id="photoRotate" min="-180" max="180" step="5" value="0" class="w-full accent-emerald-600">
                     </div>
                 </div>
 
-                <!-- Invite Name Adjustment Controls -->
-                <div id="controls-text" class="space-y-4 hidden">
+                <!-- Tab 2: Frame Position Controls (NEW requested option!) -->
+                <div id="controls-frame-pos" class="space-y-4 hidden">
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (X)</span><span id="textXVal">250px</span></div>
-                        <input type="range" id="textX" min="100" max="600" step="1" value="250" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Move (X)</span><span id="frameXVal">810px</span></div>
+                        <input type="range" id="frameX" min="500" max="950" step="1" value="810" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (Y)</span><span id="textYVal">525px</span></div>
-                        <input type="range" id="textY" min="450" max="650" step="1" value="525" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Move (Y)</span><span id="frameYVal">920px</span></div>
+                        <input type="range" id="frameY" min="600" max="1200" step="1" value="920" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Font Size</span><span id="textSizeVal">26px</span></div>
-                        <input type="range" id="textSize" min="16" max="50" step="1" value="26" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Round Size</span><span id="frameSizeVal">115px</span></div>
+                        <input type="range" id="frameSize" min="50" max="200" step="1" value="115" class="w-full accent-emerald-600">
+                    </div>
+                </div>
+
+                <!-- Tab 3: Invitation Name Text Controls (Permanent value updated!) -->
+                <div id="controls-text-control" class="space-y-4 hidden">
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (X)</span><span id="textXVal">252px</span></div>
+                        <input type="range" id="textX" min="100" max="600" step="1" value="252" class="w-full accent-emerald-600">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (Y)</span><span id="textYVal">645px</span></div>
+                        <input type="range" id="textY" min="450" max="750" step="1" value="645" class="w-full accent-emerald-600">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Font Size</span><span id="textSizeVal">50px</span></div>
+                        <input type="range" id="textSize" min="16" max="70" step="1" value="50" class="w-full accent-emerald-600">
                     </div>
                 </div>
             </div>
@@ -144,7 +162,6 @@
         let bgImg = new Image();
         let uploadedPhoto = null;
 
-        // Image source setting
         const templateSrc = 'bg4.jpg'; 
 
         window.addEventListener('DOMContentLoaded', () => {
@@ -176,7 +193,10 @@
         }
 
         function setupEventListeners() {
-            const controls = ['userName', 'userDetails', 'photoScale', 'photoX', 'photoY', 'photoRotate', 'textX', 'textY', 'textSize'];
+            const controls = [
+                'userName', 'userDetails', 'photoScale', 'photoX', 'photoY', 'photoRotate', 
+                'frameX', 'frameY', 'frameSize', 'textX', 'textY', 'textSize'
+            ];
             controls.forEach(id => {
                 document.getElementById(id).addEventListener('input', () => {
                     updateControlValueLabels();
@@ -205,6 +225,11 @@
             document.getElementById('shiftXVal').innerText = document.getElementById('photoX').value + 'px';
             document.getElementById('shiftYVal').innerText = document.getElementById('photoY').value + 'px';
             document.getElementById('rotateVal').innerText = document.getElementById('photoRotate').value + '°';
+            
+            document.getElementById('frameXVal').innerText = document.getElementById('frameX').value + 'px';
+            document.getElementById('frameYVal').innerText = document.getElementById('frameY').value + 'px';
+            document.getElementById('frameSizeVal').innerText = document.getElementById('frameSize').value + 'px';
+
             document.getElementById('textXVal').innerText = document.getElementById('textX').value + 'px';
             document.getElementById('textYVal').innerText = document.getElementById('textY').value + 'px';
             document.getElementById('textSizeVal').innerText = document.getElementById('textSize').value + 'px';
@@ -215,30 +240,31 @@
             document.getElementById('photoX').value = 0;
             document.getElementById('photoY').value = 0;
             document.getElementById('photoRotate').value = 0;
-            document.getElementById('textX').value = 250;
-            document.getElementById('textY').value = 525;
-            document.getElementById('textSize').value = 26;
+            
+            document.getElementById('frameX').value = 810;
+            document.getElementById('frameY').value = 920; // Automatically adjusted down 
+            document.getElementById('frameSize').value = 115;
+
+            document.getElementById('textX').value = 252;
+            document.getElementById('textY').value = 645;
+            document.getElementById('textSize').value = 50;
             updateControlValueLabels();
             draw();
         }
 
         function switchTab(type) {
-            const photoBtn = document.getElementById('tab-photo');
-            const textBtn = document.getElementById('tab-text');
-            const photoSec = document.getElementById('controls-photo');
-            const textSec = document.getElementById('controls-text');
-
-            if (type === 'photo') {
-                photoBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm";
-                textBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600";
-                photoSec.classList.remove('hidden');
-                textSec.classList.add('hidden');
-            } else {
-                textBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm";
-                photoBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600";
-                textSec.classList.remove('hidden');
-                photoSec.classList.add('hidden');
-            }
+            const tabs = ['photo-adjust', 'frame-pos', 'text-control'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const sec = document.getElementById(`controls-${t}`);
+                if (t === type) {
+                    btn.className = "flex-1 text-[11px] font-bold py-2 px-2 rounded-lg bg-white text-emerald-800 shadow-sm whitespace-nowrap";
+                    sec.classList.remove('hidden');
+                } else {
+                    btn.className = "flex-1 text-[11px] font-bold py-2 px-2 rounded-lg text-slate-600 whitespace-nowrap";
+                    sec.classList.add('hidden');
+                }
+            });
         }
 
         function draw() {
@@ -251,14 +277,13 @@
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // Normalizing base calculations relative to high quality aspect sizes
             const scaleFactorX = canvas.width / 1000;
             const scaleFactorY = canvas.height / 1250;
 
             const userNameVal = document.getElementById('userName').value.trim();
             const userDetailsVal = document.getElementById('userDetails').value.trim();
 
-            // 1. Render Invitation Custom Name right after 'Priyappetta' dots
+            // 1. Render Invitation Custom Name right after 'Priyappetta'
             if (userNameVal) {
                 const textX = parseFloat(document.getElementById('textX').value) * scaleFactorX;
                 const textY = parseFloat(document.getElementById('textY').value) * scaleFactorY;
@@ -273,11 +298,10 @@
                 ctx.restore();
             }
 
-            // --- ACCURATE COORDINATES FIXED FROM YOUR SENT LIVE IMAGE ---
-            // 2. Circle boundary frame exactly down matching white container board
-            const circleCenterX = 810 * scaleFactorX;
-            const circleCenterY = 765 * scaleFactorY; // Shifted heavily down exactly into the white card loop
-            const circleRadius = 115 * scaleFactorX;
+            // 2. DYNAMIC FRAME CONTROLS (Can be moved anywhere on demand)
+            const circleCenterX = parseFloat(document.getElementById('frameX').value) * scaleFactorX;
+            const circleCenterY = parseFloat(document.getElementById('frameY').value) * scaleFactorY; 
+            const circleRadius = parseFloat(document.getElementById('frameSize').value) * scaleFactorX;
 
             if (uploadedPhoto && uploadedPhoto.complete) {
                 ctx.save();
@@ -305,7 +329,7 @@
                 ctx.restore();
             }
 
-            // 3. Render Name & Place details matching exactly inside the boxes down below the round profile photo
+            // 3. Render Name & Place details matching dynamically below the moving frame
             const textBaseY = (circleCenterY + circleRadius) + (35 * scaleFactorY);
             
             if (userNameVal) {
@@ -326,7 +350,7 @@
                 ctx.restore();
             }
 
-            // 4. Branding Signature Watermark bottom footer align
+            // 4. Branding Watermark
             ctx.save();
             ctx.font = "bold 13px 'Poppins', Arial, sans-serif";
             ctx.fillStyle = "rgba(100, 116, 139, 0.8)";
