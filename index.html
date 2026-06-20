@@ -69,6 +69,7 @@
                     <button onclick="switchTab('text')" id="tab-text" class="flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600">Text Controls</button>
                 </div>
 
+                <!-- Photo Adjustment Tuning Controls -->
                 <div id="controls-photo" class="space-y-4">
                     <div>
                         <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Photo Zoom</span><span id="scaleVal">1.0x</span></div>
@@ -90,18 +91,19 @@
                     </div>
                 </div>
 
+                <!-- Invite Name Adjustment Controls -->
                 <div id="controls-text" class="space-y-4 hidden">
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (X)</span><span id="textXVal">235px</span></div>
-                        <input type="range" id="textX" min="100" max="600" step="1" value="235" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (X)</span><span id="textXVal">250px</span></div>
+                        <input type="range" id="textX" min="100" max="600" step="1" value="250" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (Y)</span><span id="textYVal">528px</span></div>
-                        <input type="range" id="textY" min="450" max="600" step="1" value="528" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (Y)</span><span id="textYVal">525px</span></div>
+                        <input type="range" id="textY" min="450" max="650" step="1" value="525" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Font Size</span><span id="textSizeVal">24px</span></div>
-                        <input type="range" id="textSize" min="16" max="40" step="1" value="24" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Font Size</span><span id="textSizeVal">26px</span></div>
+                        <input type="range" id="textSize" min="16" max="50" step="1" value="26" class="w-full accent-emerald-600">
                     </div>
                 </div>
             </div>
@@ -142,16 +144,14 @@
         let bgImg = new Image();
         let uploadedPhoto = null;
 
-        // Image template source point
+        // Image source setting
         const templateSrc = 'bg4.jpg'; 
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Set basic canvas layout first so it doesn't look blank at start
             canvas.width = 1000;
             canvas.height = 1250;
             renderPlaceholderBackground();
             
-            // Trigger background load
             bgImg.crossOrigin = "anonymous";
             bgImg.src = templateSrc;
             bgImg.onload = () => {
@@ -160,7 +160,6 @@
                 draw();
             };
             bgImg.onerror = () => {
-                console.log("Template standard load failed, running custom fallback canvas framework.");
                 draw();
             };
 
@@ -216,9 +215,9 @@
             document.getElementById('photoX').value = 0;
             document.getElementById('photoY').value = 0;
             document.getElementById('photoRotate').value = 0;
-            document.getElementById('textX').value = 235;
-            document.getElementById('textY').value = 528;
-            document.getElementById('textSize').value = 24;
+            document.getElementById('textX').value = 250;
+            document.getElementById('textY').value = 525;
+            document.getElementById('textSize').value = 26;
             updateControlValueLabels();
             draw();
         }
@@ -245,25 +244,21 @@
         function draw() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 1. Draw Template Background if loaded, else use clean white base layout
             if (bgImg && bgImg.complete && bgImg.naturalWidth !== 0) {
                 ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
             } else {
                 ctx.fillStyle = '#fffdf9';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.fillStyle = '#ef4444';
-                ctx.font = "bold 20px Arial";
-                ctx.textAlign = "center";
-                ctx.fillText("⚠️ bg4.jpg not found in folder! Please check file name.", canvas.width/2, 40);
             }
 
+            // Normalizing base calculations relative to high quality aspect sizes
             const scaleFactorX = canvas.width / 1000;
             const scaleFactorY = canvas.height / 1250;
 
             const userNameVal = document.getElementById('userName').value.trim();
             const userDetailsVal = document.getElementById('userDetails').value.trim();
 
-            // 2. Render Name beside "Priyappetta"
+            // 1. Render Invitation Custom Name right after 'Priyappetta' dots
             if (userNameVal) {
                 const textX = parseFloat(document.getElementById('textX').value) * scaleFactorX;
                 const textY = parseFloat(document.getElementById('textY').value) * scaleFactorY;
@@ -278,9 +273,10 @@
                 ctx.restore();
             }
 
-            // 3. Draw Dotted Circle Photo frame
+            // --- ACCURATE COORDINATES FIXED FROM YOUR SENT LIVE IMAGE ---
+            // 2. Circle boundary frame exactly down matching white container board
             const circleCenterX = 810 * scaleFactorX;
-            const circleCenterY = 705 * scaleFactorY;
+            const circleCenterY = 765 * scaleFactorY; // Shifted heavily down exactly into the white card loop
             const circleRadius = 115 * scaleFactorX;
 
             if (uploadedPhoto && uploadedPhoto.complete) {
@@ -309,7 +305,7 @@
                 ctx.restore();
             }
 
-            // 4. Draw Name & Place details under the circle
+            // 3. Render Name & Place details matching exactly inside the boxes down below the round profile photo
             const textBaseY = (circleCenterY + circleRadius) + (35 * scaleFactorY);
             
             if (userNameVal) {
@@ -330,7 +326,7 @@
                 ctx.restore();
             }
 
-            // 5. Dynamic Footer Branding
+            // 4. Branding Signature Watermark bottom footer align
             ctx.save();
             ctx.font = "bold 13px 'Poppins', Arial, sans-serif";
             ctx.fillStyle = "rgba(100, 116, 139, 0.8)";
