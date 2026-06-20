@@ -1,91 +1,204 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samasta Centenary Poster</title>
+    <title>Samastha Centenary Poster Generator</title>
     <style>
-        /* പോസ്റ്ററിന്റെ പ്രധാന ബോക്സ് */
-        .poster-container {
-            position: relative;
-            width: 800px;  /* ഇമേജിന്റെ കൃത്യമായ വീതി ആവശ്യാനുസരണം മാറ്റാം */
-            height: 1000px; /* ഇമേജിന്റെ കൃത്യമായ നീളം ആവശ്യാനുസരണം മാറ്റാം */
-            background-image: url('bg4.jpg');
-            background-size: cover;
-            background-position: center;
-            font-family: 'Gayathri', 'Manjari', sans-serif; /* മലയാളം ഫോണ്ടുകൾ */
-            font-weight: bold;
-        }
-
-        /* 'പ്രിയപ്പെട്ട' എന്ന് കഴിഞ്ഞിട്ട് വരുന്ന പേര് */
-        .guest-name {
-            position: absolute;
-            top: 512px;       /* മുകളിൽ നിന്നുള്ള ദൂരം (ഇത് അഡ്ജസ്റ്റ് ചെയ്യാം) */
-            left: 205px;      /* ഇടത്തുനിന്നുള്ള ദൂരം */
-            font-size: 20px;
-            color: #8b0000;   /* കടും ചുവപ്പ് നിറം */
-            white-space: nowrap;
-        }
-
-        /* ഫോട്ടോ വെക്കാനുള്ള റൗണ്ട് സ്പേസ് */
-        .photo-space {
-            position: absolute;
-            bottom: 145px;     /* താഴെ നിന്നുള്ള ദൂരം */
-            right: 62px;       /* വലത്തുനിന്നുള്ള ദൂരം */
-            width: 172px;      /* വട്ടത്തിന്റെ വീതി */
-            height: 172px;     /* വട്ടത്തിന്റെ നീളം */
-            border-radius: 50%; /* ഫോട്ടോ കൃത്യം വട്ടത്തിലാക്കാൻ */
-            overflow: hidden;
-        }
-
-        .photo-space img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* ഫോട്ടോയ്ക്ക് താഴെയുള്ള പേരും സ്ഥലവും */
-        .details-space {
-            position: absolute;
-            bottom: 50px;      /* താഴെ നിന്നുള്ള ദൂരം */
-            right: 30px;       /* വലത്തുനിന്നുള്ള ദൂരം */
-            width: 240px;      /* ടെക്സ്റ്റ് ബോക്സിന്റെ വീതി */
-            text-align: center;
-            line-height: 1.4;
-        }
-
-        .user-name {
-            font-size: 20px;
-            color: #1a1a1a;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
             margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
-
-        .user-place {
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 100%;
+            box-sizing: border-box;
+        }
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #34495e;
+        }
+        input[type="text"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 12px;
             font-size: 16px;
-            color: #555555;
-            margin: 2px 0 0 0;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        #previewContainer {
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+        canvas {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
         }
     </style>
 </head>
 <body>
 
-    <div class="poster-container">
-        
-        <!-- 'പ്രിയപ്പെട്ട' എന്നതിന് ശേഷം വരേണ്ട പേര് ഇവിടെ നൽകുക -->
-        <div class="guest-name">മുഹമ്മദ് റാഫി</div>
-
-        <!-- ഫോട്ടോ ഇവിടെ ചേർക്കുക (user-photo.jpg എന്നതിന് പകരം നിങ്ങളുടെ ഫോട്ടോയുടെ പേര് നൽകുക) -->
-        <div class="photo-space">
-            <img src="user-photo.jpg" alt="Photo">
-        </div>
-
-        <!-- ഫോട്ടോയ്ക്ക് താഴെ വരേണ്ട പേരും സ്ഥലവും ഇവിടെ നൽകുക -->
-        <div class="details-space">
-            <p class="user-name">പി. കെ. അൻവർ സദാത്</p>
-            <p class="user-place">മലപ്പുറം</p>
-        </div>
-
+<div class="container">
+    <h2>Samastha Centenary Poster Generator</h2>
+    
+    <div class="form-group">
+        <label for="userName">പേര് (Name after Priyappetta):</label>
+        <input type="text" id="userName" placeholder="Enter Name Here">
     </div>
+
+    <div class="form-group">
+        <label for="userDesignation">Designation / Place (Details):</label>
+        <input type="text" id="userDesignation" placeholder="e.g., SKSSF SKYM, Vazhakkad">
+    </div>
+
+    <div class="form-group">
+        <label for="userPhoto">Upload Photo:</label>
+        <input type="file" id="userPhoto" accept="image/*">
+    </div>
+
+    <button onclick="generatePoster()">Generate Poster</button>
+
+    <div id="previewContainer">
+        <h3>Your Poster is Ready!</h3>
+        <canvas id="posterCanvas"></canvas>
+        <button id="downloadBtn" style="background-color: #2980b9;">Download Poster</button>
+    </div>
+</div>
+
+<script>
+function generatePoster() {
+    const name = document.getElementById('userName').value;
+    const designation = document.getElementById('userDesignation').value;
+    const photoInput = document.getElementById('userPhoto');
+    
+    if(!name || !photoInput.files[0]) {
+        alert("Please enter Name and Upload a Photo!");
+        return;
+    }
+
+    const canvas = document.getElementById('posterCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    // 1. Load Background Template Image
+    const bgImage = new Image();
+    bgImage.src = 'bg4.jpg'; // Make sure your image name matches exactly
+    
+    bgImage.onload = function() {
+        // Set canvas size to match template dimension
+        canvas.width = bgImage.width;
+        canvas.height = bgImage.height;
+        
+        // Draw Template Background
+        ctx.drawImage(bgImage, 0, 0);
+        
+        // --- CONFIGURATIONS FOR COORDINATES (Nee paranja accurate sthalangal) ---
+        // Iee measurements ninte image resolution-u anusarich mathiyayi illenkil cheriya maattam varuthaam
+        
+        // 2. Add Name after 'Priyappetta'
+        ctx.font = "bold 26px 'Manjari', 'Gayathri', sans-serif"; // Malayalam custom font compatible fallback
+        ctx.fillStyle = "#a31d1d"; // Dark reddish color matching theme
+        ctx.fillText(name, 230, 523); // X: 230, Y: 523 approx near dots
+        
+        // 3. Process and Draw Round Photo inside the white card
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            const userImg = new Image();
+            userImg.onload = function() {
+                ctx.save();
+                
+                // Circle Photo Coordinates (Inside white box)
+                // Center calculated approx for the round placeholder in template
+                const centerX = 810; 
+                const centerY = 770;
+                const radius = 130; 
+                
+                // Clip canvas to circle
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+                ctx.closePath();
+                ctx.clip();
+                
+                // Draw Image inside the circle crop
+                ctx.drawImage(userImg, centerX - radius, centerY - radius, radius * 2, radius * 2);
+                ctx.restore(); // Undo clipping
+                
+                // 4. Add Name & Details right below the round photo
+                ctx.font = "bold 28px sans-serif";
+                ctx.fillStyle = "#333333";
+                ctx.textAlign = "center";
+                ctx.fillText(name, centerX, centerY + radius + 40); // Just below photo
+                
+                ctx.font = "20px sans-serif";
+                ctx.fillStyle = "#666666";
+                ctx.fillText(designation, centerX, centerY + radius + 75); // Subtext/Designation
+                
+                // 5. Footer Branding (Company Name)
+                ctx.font = "bold 14px Arial";
+                ctx.fillStyle = "#777777";
+                ctx.textAlign = "left";
+                ctx.fillText("Developed by ATAVA DIGITAL SERVICES & TRADING", 40, canvas.height - 20);
+                
+                // Show Preview & Setup Download Link
+                document.getElementById('previewContainer').style.display = 'block';
+                setupDownloadButton(canvas);
+            };
+            userImg.src = event.target.result;
+        };
+        reader.readAsDataURL(photoInput.files[0]);
+    };
+    
+    bgImage.onerror = function() {
+        alert("Template image 'bg4.jpg' load cheyyan kazhinjilla. File name correct aano ennu check cheyyu muthe.");
+    };
+}
+
+function setupDownloadButton(canvas) {
+    const downloadBtn = document.getElementById('downloadBtn');
+    downloadBtn.onclick = function() {
+        const link = document.createElement('a');
+        link.download = 'Samastha_Centenary_Poster.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    };
+}
+</script>
 
 </body>
 </html>
