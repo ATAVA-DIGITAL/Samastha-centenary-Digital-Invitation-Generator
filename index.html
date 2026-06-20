@@ -1,204 +1,510 @@
+slides:Samastha Centenary Poster Generator:index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Samastha Centenary Poster Generator</title>
+    <title>Samastha Centenary - Personal Invitation Generator</title>
+    <!-- Tailwind CSS for super-premium styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for gorgeous Malayalam typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Chettan+2:wght@400;600;800&family=Manjari:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for sleek UI icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-family: 'Poppins', 'Manjari', sans-serif;
+            background: radial-gradient(circle at top left, #fbfaf7 0%, #eef1f6 100%);
         }
-        .container {
-            max-width: 600px;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            width: 100%;
-            box-sizing: border-box;
+        .malayalam-font {
+            font-family: 'Baloo Chettan 2', 'Manjari', sans-serif;
         }
-        h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-top: 0;
+        /* Custom scrollbar for control panel */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
-        .form-group {
-            margin-bottom: 15px;
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #34495e;
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
-        input[type="text"], input[type="file"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-        button {
-            width: 100%;
-            background-color: #27ae60;
-            color: white;
-            border: none;
-            padding: 12px;
-            font-size: 16px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-        button:hover {
-            background-color: #219653;
-        }
-        #previewContainer {
-            margin-top: 20px;
-            text-align: center;
-            display: none;
-        }
-        canvas {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
     </style>
 </head>
-<body>
+<body class="min-height-screen text-slate-800">
 
-<div class="container">
-    <h2>Samastha Centenary Poster Generator</h2>
-    
-    <div class="form-group">
-        <label for="userName">പേര് (Name after Priyappetta):</label>
-        <input type="text" id="userName" placeholder="Enter Name Here">
-    </div>
+    <!-- Top Navigation Bar -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-50 px-6 py-4 shadow-sm">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <img src="logo.jpg" alt="Samastha Logo" class="h-12 w-12 object-contain rounded-lg shadow-sm border border-slate-100" onerror="this.src='https://placehold.co/100x100?text=Logo'">
+                <div>
+                    <h1 class="text-xl font-bold text-emerald-800 tracking-tight leading-none mb-1">Samastha Centenary</h1>
+                    <p class="text-xs text-slate-500 font-medium">Personalized Invitation Card Engine</p>
+                </div>
+            </div>
+            <div class="text-right hidden md:block">
+                <span class="bg-emerald-50 text-emerald-800 text-xs font-semibold px-3 py-1.5 rounded-full border border-emerald-100">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-1"></i> Live Invitation Customizer
+                </span>
+            </div>
+        </div>
+    </header>
 
-    <div class="form-group">
-        <label for="userDesignation">Designation / Place (Details):</label>
-        <input type="text" id="userDesignation" placeholder="e.g., SKSSF SKYM, Vazhakkad">
-    </div>
-
-    <div class="form-group">
-        <label for="userPhoto">Upload Photo:</label>
-        <input type="file" id="userPhoto" accept="image/*">
-    </div>
-
-    <button onclick="generatePoster()">Generate Poster</button>
-
-    <div id="previewContainer">
-        <h3>Your Poster is Ready!</h3>
-        <canvas id="posterCanvas"></canvas>
-        <button id="downloadBtn" style="background-color: #2980b9;">Download Poster</button>
-    </div>
-</div>
-
-<script>
-function generatePoster() {
-    const name = document.getElementById('userName').value;
-    const designation = document.getElementById('userDesignation').value;
-    const photoInput = document.getElementById('userPhoto');
-    
-    if(!name || !photoInput.files[0]) {
-        alert("Please enter Name and Upload a Photo!");
-        return;
-    }
-
-    const canvas = document.getElementById('posterCanvas');
-    const ctx = canvas.getContext('2d');
-    
-    // 1. Load Background Template Image
-    const bgImage = new Image();
-    bgImage.src = 'bg4.jpg'; // Make sure your image name matches exactly
-    
-    bgImage.onload = function() {
-        // Set canvas size to match template dimension
-        canvas.width = bgImage.width;
-        canvas.height = bgImage.height;
+    <!-- Main Workspace -->
+    <main class="max-w-7xl mx-auto p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-8">
         
-        // Draw Template Background
-        ctx.drawImage(bgImage, 0, 0);
-        
-        // --- CONFIGURATIONS FOR COORDINATES (Nee paranja accurate sthalangal) ---
-        // Iee measurements ninte image resolution-u anusarich mathiyayi illenkil cheriya maattam varuthaam
-        
-        // 2. Add Name after 'Priyappetta'
-        ctx.font = "bold 26px 'Manjari', 'Gayathri', sans-serif"; // Malayalam custom font compatible fallback
-        ctx.fillStyle = "#a31d1d"; // Dark reddish color matching theme
-        ctx.fillText(name, 230, 523); // X: 230, Y: 523 approx near dots
-        
-        // 3. Process and Draw Round Photo inside the white card
-        const reader = new FileReader();
-        reader.onload = function(event) {
-            const userImg = new Image();
-            userImg.onload = function() {
+        <!-- Left Side: Interactive Design Panel (5 Cols) -->
+        <section class="lg:col-span-5 bg-white rounded-2xl border border-slate-200 p-6 shadow-md flex flex-col gap-6">
+            <div>
+                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2 mb-1">
+                    <i class="fa-solid fa-sliders text-emerald-600"></i> Invitation Details
+                </h2>
+                <p class="text-xs text-slate-500">Enter your info & adjust positions to fit beautifully in the card.</p>
+            </div>
+
+            <!-- Inputs -->
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-user mr-1 text-slate-400"></i> Full Name (പേര്)
+                    </label>
+                    <input type="text" id="userName" value="Abdul Salam" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-slate-700" placeholder="Type Name here...">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-map-pin mr-1 text-slate-400"></i> Place & Organization (വിവരങ്ങൾ)
+                    </label>
+                    <input type="text" id="userDetails" value="Vazhakkad" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:bg-white outline-none transition-all font-medium text-slate-700" placeholder="e.g. Vazhakkad, SKSSF">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-image mr-1 text-slate-400"></i> Upload Your Photo (ഫോട്ടോ)
+                    </label>
+                    <div class="relative flex items-center justify-center border-2 border-dashed border-slate-300 hover:border-emerald-500 bg-slate-50 hover:bg-emerald-50/20 rounded-xl p-4 transition-all group cursor-pointer">
+                        <input type="file" id="userPhoto" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                        <div class="text-center">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl text-slate-400 group-hover:text-emerald-600 transition-colors mb-1"></i>
+                            <p class="text-xs text-slate-600 font-medium">Click to upload your profile photo</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Positioning & Tuning Controls -->
+            <div class="border-t border-slate-100 pt-5 space-y-5">
+                <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                    <i class="fa-solid fa-circle-nodes text-emerald-600"></i> Calibrate Positioning
+                </h3>
+
+                <!-- Tabs to switch between Photo/Text adjustments -->
+                <div class="flex gap-2 p-1 bg-slate-100 rounded-xl">
+                    <button onclick="switchTab('photo')" id="tab-photo" class="flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm transition-all">Photo Controls</button>
+                    <button onclick="switchTab('text')" id="tab-text" class="flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600 hover:bg-white/50 transition-all">Text Controls</button>
+                </div>
+
+                <!-- Photo Adjustment Controls -->
+                <div id="controls-photo" class="space-y-4">
+                    <div>
+                        <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                            <span>Photo Scale (Zoom)</span>
+                            <span id="scaleVal">1.0x</span>
+                        </div>
+                        <input type="range" id="photoScale" min="0.1" max="3" step="0.05" value="1.0" class="w-full accent-emerald-600">
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                                <span>Photo Shift X</span>
+                                <span id="shiftXVal">0px</span>
+                            </div>
+                            <input type="range" id="photoX" min="-300" max="300" step="1" value="0" class="w-full accent-emerald-600">
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                                <span>Photo Shift Y</span>
+                                <span id="shiftYVal">0px</span>
+                            </div>
+                            <input type="range" id="photoY" min="-300" max="300" step="1" value="0" class="w-full accent-emerald-600">
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                            <span>Rotate Photo</span>
+                            <span id="rotateVal">0°</span>
+                        </div>
+                        <input type="range" id="photoRotate" min="-180" max="180" step="5" value="0" class="w-full accent-emerald-600">
+                    </div>
+                </div>
+
+                <!-- Text Adjustment Controls -->
+                <div id="controls-text" class="space-y-4 hidden">
+                    <div>
+                        <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                            <span>Invite Name Horizontal Pos (X)</span>
+                            <span id="textXVal">250px</span>
+                        </div>
+                        <input type="range" id="textX" min="100" max="600" step="1" value="235" class="w-full accent-emerald-600">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                            <span>Invite Name Vertical Pos (Y)</span>
+                            <span id="textYVal">525px</span>
+                        </div>
+                        <input type="range" id="textY" min="450" max="600" step="1" value="525" class="w-full accent-emerald-600">
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-xs font-medium text-slate-600 mb-1">
+                            <span>Invite Font Size</span>
+                            <span id="textSizeVal">24px</span>
+                        </div>
+                        <input type="range" id="textSize" min="16" max="40" step="1" value="24" class="w-full accent-emerald-600">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Download Engine trigger -->
+            <div class="mt-auto border-t border-slate-100 pt-5">
+                <button onclick="downloadPoster()" class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold py-4 px-6 rounded-xl shadow-lg shadow-emerald-600/20 hover:shadow-emerald-700/30 transition-all flex items-center justify-center gap-2 text-md">
+                    <i class="fa-solid fa-circle-down text-lg"></i> Download High-Res Invitation
+                </button>
+            </div>
+        </section>
+
+        <!-- Right Side: Real-time High-Res Canvas View (7 Cols) -->
+        <section class="lg:col-span-7 flex flex-col gap-4">
+            <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-md flex flex-col items-center justify-center min-h-[500px]">
+                <div class="flex justify-between items-center w-full mb-3 px-2">
+                    <span class="text-xs font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
+                        <span class="h-2.5 w-2.5 bg-emerald-500 rounded-full animate-pulse"></span> Dynamic Preview
+                    </span>
+                    <button onclick="resetControls()" class="text-xs font-semibold text-slate-500 hover:text-emerald-700 transition-colors">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Positions
+                    </button>
+                </div>
+                
+                <!-- Container wrapping canvas to fit cleanly on all displays -->
+                <div class="w-full overflow-hidden bg-slate-50 rounded-xl border border-slate-100 p-2 flex items-center justify-center">
+                    <canvas id="posterCanvas" class="max-w-full h-auto rounded-lg shadow-inner bg-slate-200 transition-all"></canvas>
+                </div>
+            </div>
+
+            <!-- Developed Branding Signature Bar -->
+            <footer class="bg-emerald-950 text-emerald-100/80 text-center py-4 px-6 rounded-2xl shadow-sm border border-emerald-900 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                <div class="flex items-center gap-1">
+                    <i class="fa-solid fa-code text-emerald-400"></i>
+                    <span>Developed by <strong class="text-white">ATAVA DIGITAL SERVICES & TRADING</strong></span>
+                </div>
+                <div class="text-emerald-300 font-semibold tracking-wide">
+                    Abdul Salam Ahsani Vazhakkad
+                </div>
+            </footer>
+        </section>
+
+    </main>
+
+    <!-- App State and Processing Logic -->
+    <script>
+        // Set Canvas reference and configuration properties
+        const canvas = document.getElementById('posterCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // State managers
+        let bgImg = null;
+        let logoImg = null;
+        let uploadedPhoto = null;
+        let isImageLoaded = false;
+
+        // Default layout parameters
+        const templateSrc = 'Gemini_Generated_Image_drgt51drgt51drgt.png';
+        const logoSrc = 'logo.jpg';
+
+        // Load background image on startup
+        window.addEventListener('DOMContentLoaded', () => {
+            loadTemplateAndRender();
+            setupEventListeners();
+        });
+
+        function loadTemplateAndRender() {
+            bgImg = new Image();
+            bgImg.crossOrigin = "anonymous";
+            bgImg.src = templateSrc;
+
+            bgImg.onload = () => {
+                // Ensure high definition resolution (using template dimensions)
+                canvas.width = bgImg.naturalWidth || bgImg.width || 1200;
+                canvas.height = bgImg.naturalHeight || bgImg.height || 1500;
+                
+                isImageLoaded = true;
+                draw();
+            };
+
+            bgImg.onerror = () => {
+                console.error("Default background image template not found. Using custom generated background container.");
+                // Create a beautiful placeholder template dynamically if background asset goes missing
+                generateFallbackTemplate();
+            };
+
+            // Preload optional logo image for overlay
+            logoImg = new Image();
+            logoImg.crossOrigin = "anonymous";
+            logoImg.src = logoSrc;
+            logoImg.onload = () => {
+                draw();
+            };
+        }
+
+        function generateFallbackTemplate() {
+            isImageLoaded = true;
+            canvas.width = 1200;
+            canvas.height = 1500;
+            
+            // Render a state-of-the-art beautiful backdrop gradient as placeholder
+            const gradient = ctx.createRadialGradient(600, 750, 100, 600, 750, 800);
+            gradient.addColorStop(0, '#fffbf5');
+            gradient.addColorStop(1, '#e3e9f3');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1200, 1500);
+            
+            draw();
+        }
+
+        // Global Event listeners to update Canvas automatically as values shift
+        function setupEventListeners() {
+            const controls = ['userName', 'userDetails', 'photoScale', 'photoX', 'photoY', 'photoRotate', 'textX', 'textY', 'textSize'];
+            controls.forEach(id => {
+                document.getElementById(id).addEventListener('input', () => {
+                    updateControlValueLabels();
+                    draw();
+                });
+            });
+
+            // Capture photo uploads instantly
+            document.getElementById('userPhoto').addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        uploadedPhoto = new Image();
+                        uploadedPhoto.onload = () => {
+                            // Reset zoom/rotation/translates for new image
+                            document.getElementById('photoScale').value = 1.0;
+                            document.getElementById('photoX').value = 0;
+                            document.getElementById('photoY').value = 0;
+                            document.getElementById('photoRotate').value = 0;
+                            updateControlValueLabels();
+                            draw();
+                        };
+                        uploadedPhoto.src = event.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function updateControlValueLabels() {
+            document.getElementById('scaleVal').innerText = document.getElementById('photoScale').value + 'x';
+            document.getElementById('shiftXVal').innerText = document.getElementById('photoX').value + 'px';
+            document.getElementById('shiftYVal').innerText = document.getElementById('photoY').value + 'px';
+            document.getElementById('rotateVal').innerText = document.getElementById('photoRotate').value + '°';
+            document.getElementById('textXVal').innerText = document.getElementById('textX').value + 'px';
+            document.getElementById('textYVal').innerText = document.getElementById('textY').value + 'px';
+            document.getElementById('textSizeVal').innerText = document.getElementById('textSize').value + 'px';
+        }
+
+        function resetControls() {
+            document.getElementById('photoScale').value = 1.0;
+            document.getElementById('photoX').value = 0;
+            document.getElementById('photoY').value = 0;
+            document.getElementById('photoRotate').value = 0;
+            document.getElementById('textX').value = 235;
+            document.getElementById('textY').value = 525;
+            document.getElementById('textSize').value = 24;
+            updateControlValueLabels();
+            draw();
+        }
+
+        function switchTab(type) {
+            const photoBtn = document.getElementById('tab-photo');
+            const textBtn = document.getElementById('tab-text');
+            const photoSec = document.getElementById('controls-photo');
+            const textSec = document.getElementById('controls-text');
+
+            if (type === 'photo') {
+                photoBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm transition-all";
+                textBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600 hover:bg-white/50 transition-all";
+                photoSec.classList.remove('hidden');
+                textSec.classList.add('hidden');
+            } else {
+                textBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg bg-white text-emerald-800 shadow-sm transition-all";
+                photoBtn.className = "flex-1 text-xs font-bold py-2 px-3 rounded-lg text-slate-600 hover:bg-white/50 transition-all";
+                textSec.classList.remove('hidden');
+                photoSec.classList.add('hidden');
+            }
+        }
+
+        // Core Drawing Handler
+        function draw() {
+            if (!isImageLoaded) return;
+
+            // Clear previous layouts
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 1. Draw Template Background Image
+            if (bgImg && bgImg.complete) {
+                ctx.drawImage(bgImg, 0, 0, canvas.width, canvas.height);
+            } else {
+                // If template image loading failed, provide a clean beautiful backdrop framework
+                generateFallbackTemplate();
+            }
+
+            // Normalize coordinate calculations mapping on canvas natural dimensions
+            const scaleFactorX = canvas.width / 1000;
+            const scaleFactorY = canvas.height / 1250;
+
+            // Get live values from UI Controls
+            const userNameVal = document.getElementById('userName').value.trim();
+            const userDetailsVal = document.getElementById('userDetails').value.trim();
+
+            // 2. Render Name beside "Priyappetta"
+            if (userNameVal) {
+                const textX = parseFloat(document.getElementById('textX').value) * scaleFactorX;
+                const textY = parseFloat(document.getElementById('textY').value) * scaleFactorY;
+                const textSize = parseInt(document.getElementById('textSize').value) * scaleFactorX;
+
+                ctx.save();
+                ctx.font = `700 ${textSize}px 'Baloo Chettan 2', 'Manjari', sans-serif`;
+                ctx.fillStyle = '#a31d1d'; // Crimson Red
+                ctx.textAlign = 'left';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(userNameVal, textX, textY);
+                ctx.restore();
+            }
+
+            // 3. Draw Dotted Circle Photo frame on bottom right
+            // Dotted Circle target specifications (Scaled to fit accurately)
+            const circleCenterX = 810 * scaleFactorX;
+            const circleCenterY = 705 * scaleFactorY;
+            const circleRadius = 115 * scaleFactorX;
+
+            if (uploadedPhoto && uploadedPhoto.complete) {
                 ctx.save();
                 
-                // Circle Photo Coordinates (Inside white box)
-                // Center calculated approx for the round placeholder in template
-                const centerX = 810; 
-                const centerY = 770;
-                const radius = 130; 
-                
-                // Clip canvas to circle
+                // Crop mask layer to match the rounded boundary inside white board
                 ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2, true);
+                ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2, true);
                 ctx.closePath();
                 ctx.clip();
-                
-                // Draw Image inside the circle crop
-                ctx.drawImage(userImg, centerX - radius, centerY - radius, radius * 2, radius * 2);
-                ctx.restore(); // Undo clipping
-                
-                // 4. Add Name & Details right below the round photo
-                ctx.font = "bold 28px sans-serif";
-                ctx.fillStyle = "#333333";
-                ctx.textAlign = "center";
-                ctx.fillText(name, centerX, centerY + radius + 40); // Just below photo
-                
-                ctx.font = "20px sans-serif";
-                ctx.fillStyle = "#666666";
-                ctx.fillText(designation, centerX, centerY + radius + 75); // Subtext/Designation
-                
-                // 5. Footer Branding (Company Name)
-                ctx.font = "bold 14px Arial";
-                ctx.fillStyle = "#777777";
-                ctx.textAlign = "left";
-                ctx.fillText("Developed by ATAVA DIGITAL SERVICES & TRADING", 40, canvas.height - 20);
-                
-                // Show Preview & Setup Download Link
-                document.getElementById('previewContainer').style.display = 'block';
-                setupDownloadButton(canvas);
-            };
-            userImg.src = event.target.result;
-        };
-        reader.readAsDataURL(photoInput.files[0]);
-    };
-    
-    bgImage.onerror = function() {
-        alert("Template image 'bg4.jpg' load cheyyan kazhinjilla. File name correct aano ennu check cheyyu muthe.");
-    };
-}
 
-function setupDownloadButton(canvas) {
-    const downloadBtn = document.getElementById('downloadBtn');
-    downloadBtn.onclick = function() {
-        const link = document.createElement('a');
-        link.download = 'Samastha_Centenary_Poster.png';
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-    };
-}
-</script>
+                // Apply interactive slider controls (X shift, Y shift, Scale, Rotate)
+                const photoScale = parseFloat(document.getElementById('photoScale').value);
+                const photoX = parseFloat(document.getElementById('photoX').value) * scaleFactorX;
+                const photoY = parseFloat(document.getElementById('photoY').value) * scaleFactorY;
+                const photoRotate = parseFloat(document.getElementById('photoRotate').value) * Math.PI / 180;
 
+                ctx.translate(circleCenterX + photoX, circleCenterY + photoY);
+                ctx.rotate(photoRotate);
+
+                // Compute aspect-ratio matching fit
+                const imgWidth = uploadedPhoto.width;
+                const imgHeight = uploadedPhoto.height;
+                const ratio = Math.max((circleRadius * 2) / imgWidth, (circleRadius * 2) / imgHeight) * photoScale;
+
+                const drawWidth = imgWidth * ratio;
+                const drawHeight = imgHeight * ratio;
+
+                ctx.drawImage(uploadedPhoto, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
+                ctx.restore();
+            } else {
+                // Render an elegant elegant vector placeholder inside the dotted boundary
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2);
+                ctx.fillStyle = '#f8fafc';
+                ctx.fill();
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.stroke();
+
+                // Icon indicator
+                ctx.fillStyle = '#94a3b8';
+                ctx.font = `600 ${22 * scaleFactorX}px 'Poppins', sans-serif`;
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText("Upload Photo", circleCenterX, circleCenterY);
+                ctx.restore();
+            }
+
+            // 4. Draw Name & Place details inside the bottom white card
+            const textBaseY = (circleCenterY + circleRadius) + (35 * scaleFactorY);
+            
+            // Name under photo
+            if (userNameVal) {
+                ctx.save();
+                ctx.font = `700 ${26 * scaleFactorX}px 'Baloo Chettan 2', 'Manjari', sans-serif`;
+                ctx.fillStyle = '#1e293b'; // Slate 800
+                ctx.textAlign = 'center';
+                ctx.fillText(userNameVal, circleCenterX, textBaseY);
+                ctx.restore();
+            }
+
+            // Designation / Place subtext
+            if (userDetailsVal) {
+                ctx.save();
+                ctx.font = `600 ${18 * scaleFactorX}px 'Baloo Chettan 2', 'Manjari', sans-serif`;
+                ctx.fillStyle = '#64748b'; // Slate 500
+                ctx.textAlign = 'center';
+                ctx.fillText(userDetailsVal, circleCenterX, textBaseY + (32 * scaleFactorY));
+                ctx.restore();
+            }
+
+            // 5. Draw dynamically placed modern branding watermarks
+            ctx.save();
+            ctx.font = "bold 13px 'Poppins', Arial, sans-serif";
+            ctx.fillStyle = "rgba(100, 116, 139, 0.75)";
+            ctx.textAlign = "left";
+            ctx.fillText("Developed by ATAVA DIGITAL SERVICES & TRADING • Abdul Salam Ahsani Vazhakkad", 45 * scaleFactorX, canvas.height - (30 * scaleFactorY));
+            ctx.restore();
+        }
+
+        // Automatic Download Engine trigger
+        function downloadPoster() {
+            if (!uploadedPhoto) {
+                alert("Please upload your photo before generating and downloading the invitation poster!");
+                return;
+            }
+
+            const name = document.getElementById('userName').value.trim() || 'Invitation';
+            const cleanName = name.replace(/[^a-zA-Z0-9]/g, "_");
+            const dataURL = canvas.toDataURL('image/png');
+            
+            const link = document.createElement('a');
+            link.download = `Samastha_Centenary_Invite_${cleanName}.png`;
+            link.href = dataURL;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
+```eof
+
+### 🌟 Enthellam aanu njan ee code-il varuthiyath:
+* **Interactive Live Customizer:** Name-um Place-um change cheyyunnath live aayi canvas-il dynamic aayi updates aakum.
+* **Photo Calibration Panel:** User upload cheyyunna photo exact vertical limits-inum dotted circles-inum ullil centralize cheyyan slide bars add cheythittund.
+* **Malayalam Fonts Integration:** Malayalam layout visual beauty tharam 'Baloo Chettan 2' and 'Manjari' fonts customize cheythittund.
+* **Tailwind CSS Premium Interface:** Mobile phone-ilum computer-ilum orupole responsive aayi canvas and controls render cheyyunnathaanu.
+
+Nee paranja pole ninte branding logo (`logo.jpg`), full background poster (`Gemini_Generated_Image_drgt51drgt51drgt.png`) ellam code-ile defaults aayi handle cheythittundu. Ithu save cheythu GitHub link vazhi share cheythal ellavarkkum swantham aayi automatic interactive premium poster generated aayi kuttum! 🚀
+
+Nallonnam koodi adipoli aakki thakka reethiyil onnu try cheythu nokku muthe!
