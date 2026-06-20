@@ -43,12 +43,12 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Full Name (പേര്)</label>
-                    <input type="text" id="userName" value="Abdul Salam" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-medium text-slate-700">
+                    <input type="text" id="userName" value="TYPE YOUR NAME" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-medium text-slate-700">
                 </div>
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-600 uppercase mb-2">Place (വിവരങ്ങൾ)</label>
-                    <input type="text" id="userDetails" value="Vazhakkad" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-medium text-slate-700">
+                    <input type="text" id="userDetails" value="PLACE" class="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl outline-none font-medium text-slate-700">
                 </div>
 
                 <div>
@@ -71,57 +71,57 @@
                     <button onclick="switchTab('text-control')" id="tab-text-control" class="flex-1 text-[11px] font-bold py-2 px-2 rounded-lg text-slate-600 whitespace-nowrap">Text Controls</button>
                 </div>
 
-                <!-- Tab 1: Photo Inner Adjustment Controls -->
+                <!-- Tab 1: Photo Inner Adjustment Controls (Permanent Locked!) -->
                 <div id="controls-photo-adjust" class="space-y-4">
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Photo Zoom</span><span id="scaleVal">1.0x</span></div>
-                        <input type="range" id="photoScale" min="0.1" max="3" step="0.05" value="1.0" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Photo Zoom</span><span id="scaleVal">1.25x</span></div>
+                        <input type="range" id="photoScale" min="0.1" max="3" step="0.05" value="1.25" class="w-full accent-emerald-600">
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift X</span><span id="shiftXVal">0px</span></div>
-                            <input type="range" id="photoX" min="-300" max="300" step="1" value="0" class="w-full accent-emerald-600">
+                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift X</span><span id="shiftXVal">2px</span></div>
+                            <input type="range" id="photoX" min="-300" max="300" step="1" value="2" class="w-full accent-emerald-600">
                         </div>
                         <div>
-                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift Y</span><span id="shiftYVal">0px</span></div>
-                            <input type="range" id="photoY" min="-300" max="300" step="1" value="0" class="w-full accent-emerald-600">
+                            <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Inner Shift Y</span><span id="shiftYVal">70px</span></div>
+                            <input type="range" id="photoY" min="-300" max="300" step="1" value="70" class="w-full accent-emerald-600">
                         </div>
                     </div>
                     <div>
                         <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Rotate Photo</span><span id="rotateVal">0°</span></div>
-                        <input type="range" id="photoRotate" min="-180" max="180" step="5" value="0" class="w-full accent-emerald-600">
+                        <input type="range" id="photoRotate" min="-180" max="180" step="1" value="0" class="w-full accent-emerald-600">
                     </div>
                 </div>
 
-                <!-- Tab 2: Frame Position Controls (NEW requested option!) -->
+                <!-- Tab 2: Frame Position Controls (Permanent Locked!) -->
                 <div id="controls-frame-pos" class="space-y-4 hidden">
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Move (X)</span><span id="frameXVal">810px</span></div>
-                        <input type="range" id="frameX" min="500" max="950" step="1" value="810" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Move (X)</span><span id="frameXVal">822px</span></div>
+                        <input type="range" id="frameX" min="500" max="950" step="1" value="822" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Move (Y)</span><span id="frameYVal">920px</span></div>
-                        <input type="range" id="frameY" min="600" max="1200" step="1" value="920" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Move (Y)</span><span id="frameYVal">976px</span></div>
+                        <input type="range" id="frameY" min="600" max="1200" step="1" value="976" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Round Size</span><span id="frameSizeVal">115px</span></div>
-                        <input type="range" id="frameSize" min="50" max="200" step="1" value="115" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Frame Round Size</span><span id="frameSizeVal">127px</span></div>
+                        <input type="range" id="frameSize" min="50" max="250" step="1" value="127" class="w-full accent-emerald-600">
                     </div>
                 </div>
 
-                <!-- Tab 3: Invitation Name Text Controls (Permanent value updated!) -->
+                <!-- Tab 3: Invitation Name Text Controls (Permanent Locked!) -->
                 <div id="controls-text-control" class="space-y-4 hidden">
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (X)</span><span id="textXVal">252px</span></div>
-                        <input type="range" id="textX" min="100" max="600" step="1" value="252" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (X)</span><span id="textXVal">259px</span></div>
+                        <input type="range" id="textX" min="100" max="600" step="1" value="259" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (Y)</span><span id="textYVal">645px</span></div>
-                        <input type="range" id="textY" min="450" max="750" step="1" value="645" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Name Pos (Y)</span><span id="textYVal">640px</span></div>
+                        <input type="range" id="textY" min="450" max="750" step="1" value="640" class="w-full accent-emerald-600">
                     </div>
                     <div>
-                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Font Size</span><span id="textSizeVal">50px</span></div>
-                        <input type="range" id="textSize" min="16" max="70" step="1" value="50" class="w-full accent-emerald-600">
+                        <div class="flex justify-between text-xs text-slate-600 mb-1"><span>Font Size</span><span id="textSizeVal">31px</span></div>
+                        <input type="range" id="textSize" min="16" max="70" step="1" value="31" class="w-full accent-emerald-600">
                     </div>
                 </div>
             </div>
@@ -181,6 +181,7 @@
             };
 
             setupEventListeners();
+            updateControlValueLabels();
         });
 
         function renderPlaceholderBackground() {
@@ -236,18 +237,18 @@
         }
 
         function resetControls() {
-            document.getElementById('photoScale').value = 1.0;
-            document.getElementById('photoX').value = 0;
-            document.getElementById('photoY').value = 0;
+            document.getElementById('photoScale').value = 1.25;
+            document.getElementById('photoX').value = 2;
+            document.getElementById('photoY').value = 70;
             document.getElementById('photoRotate').value = 0;
             
-            document.getElementById('frameX').value = 810;
-            document.getElementById('frameY').value = 920; // Automatically adjusted down 
-            document.getElementById('frameSize').value = 115;
+            document.getElementById('frameX').value = 822;
+            document.getElementById('frameY').value = 976; 
+            document.getElementById('frameSize').value = 127;
 
-            document.getElementById('textX').value = 252;
-            document.getElementById('textY').value = 645;
-            document.getElementById('textSize').value = 50;
+            document.getElementById('textX').value = 259;
+            document.getElementById('textY').value = 640;
+            document.getElementById('textSize').value = 31;
             updateControlValueLabels();
             draw();
         }
@@ -298,12 +299,31 @@
                 ctx.restore();
             }
 
-            // 2. DYNAMIC FRAME CONTROLS (Can be moved anywhere on demand)
+            // 2. DYNAMIC FRAME CONTROLS WITH BEAUTIFUL STROKE
             const circleCenterX = parseFloat(document.getElementById('frameX').value) * scaleFactorX;
             const circleCenterY = parseFloat(document.getElementById('frameY').value) * scaleFactorY; 
             const circleRadius = parseFloat(document.getElementById('frameSize').value) * scaleFactorX;
 
             if (uploadedPhoto && uploadedPhoto.complete) {
+                // --- FIRST: DRAW DECORATIVE OUTER SHADOW STROKE ---
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(circleCenterX, circleCenterY, circleRadius + (4 * scaleFactorX), 0, Math.PI * 2, true);
+                ctx.lineWidth = 6 * scaleFactorX;
+                ctx.strokeStyle = '#d4af37'; // Elegant Gold Metallic Stroke Color
+                ctx.stroke();
+                ctx.restore();
+
+                // --- SECOND: INNER CONTRAST BORDER ---
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(circleCenterX, circleCenterY, circleRadius + (1 * scaleFactorX), 0, Math.PI * 2, true);
+                ctx.lineWidth = 3 * scaleFactorX;
+                ctx.strokeStyle = '#ffffff'; // Sharp White separation ring
+                ctx.stroke();
+                ctx.restore();
+
+                // --- THIRD: CLIP AND DRAW PHOTO ---
                 ctx.save();
                 ctx.beginPath();
                 ctx.arc(circleCenterX, circleCenterY, circleRadius, 0, Math.PI * 2, true);
@@ -330,7 +350,7 @@
             }
 
             // 3. Render Name & Place details matching dynamically below the moving frame
-            const textBaseY = (circleCenterY + circleRadius) + (35 * scaleFactorY);
+            const textBaseY = (circleCenterX && circleCenterY) ? (circleCenterY + circleRadius + (35 * scaleFactorY)) : 0;
             
             if (userNameVal) {
                 ctx.save();
